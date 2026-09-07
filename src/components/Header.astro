@@ -1,0 +1,41 @@
+---
+// Header sticky: logo + navegación + acciones
+---
+<header class="header">
+  <div class="wrap">
+    <a class="logo" href="#" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">
+      <span class="mark">
+        <svg width="34" height="34" viewBox="0 0 40 40" fill="none">
+          <path d="M6 26c0-9 7-16 16-16 6 0 11 3 13 8-3-1-6-1-9 1 2 1 3 3 3 5-2-1-4-1-6 0 1 1 2 2 2 4-3-2-7-2-10 0-3 2-5 5-5 8H6z" fill="#111"/>
+          <path d="M29 12c2-3 5-4 8-4-1 3-3 5-6 6z" fill="#e11d2e"/>
+        </svg>
+      </span>
+      <span>Lulu<b>Shark</b></span>
+    </a>
+
+    <nav class="nav">
+      <a href="#" class="active">Inicio</a>
+      <a href="#destacados" data-nav="Mujer">Mujer</a>
+      <a href="#destacados" data-nav="Hombre">Hombre</a>
+      <a href="#destacados" data-nav="Accesorios">Accesorios</a>
+      <a href="#destacados">Nuevos</a>
+      <a href="#destacados" class="oferta">Ofertas</a>
+    </nav>
+
+    <div class="head-actions">
+      <button class="icon-btn" id="searchToggle" aria-label="Buscar">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+      </button>
+      <button class="icon-btn" aria-label="Cuenta">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-7 8-7s8 3 8 7"/></svg>
+      </button>
+      <button class="icon-btn" id="bagBtn" aria-label="Mis apartados">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+        <span class="badge-count hidden" id="bagCount">0</span>
+      </button>
+      <button class="icon-btn burger" id="burgerBtn" aria-label="Menú">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+      </button>
+    </div>
+  </div>
+</header>

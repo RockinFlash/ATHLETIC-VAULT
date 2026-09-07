@@ -1,0 +1,38 @@
+---
+// Banners inferiores: Hombre, Detalles, Mujer
+const banners = [
+  {
+    k: "BUILT DIFFERENT",
+    title: "Hombre",
+    cta: "EXPLORA HOMBRE",
+    filter: "Hombre",
+    bg: `<svg viewBox='0 0 400 260' preserveAspectRatio='xMidYMid slice'><rect width='400' height='260' fill='#262626'/><g fill='#0d0d0d'><circle cx='200' cy='90' r='34'/><path d='M150 128 l34 -16 c8 8 34 8 42 0 l34 16 l24 30 l-22 20 l-8 -8 v120 c0 10 -8 18 -18 18 h-76 c-10 0 -18 -8 -18 -18 v-120 l-8 8 l-22 -20 z'/></g></svg>`,
+  },
+  {
+    k: "DETALLES QUE INSPIRAN",
+    title: "Nueva colección",
+    cta: "VER MÁS",
+    filter: "Todos",
+    bg: `<svg viewBox='0 0 400 260' preserveAspectRatio='xMidYMid slice'><rect width='400' height='260' fill='#1c1c1c'/><g fill='none' stroke='#3a3a3a' stroke-width='2'><path d='M120 60 h160 v140 h-160 z'/><path d='M120 130 h160'/><path d='M200 60 v140'/></g><circle cx='200' cy='130' r='26' fill='#e11d2e'/></svg>`,
+  },
+  {
+    k: "MOVE BETTER TOGETHER",
+    title: "Mujer",
+    cta: "EXPLORA MUJER",
+    filter: "Mujer",
+    bg: `<svg viewBox='0 0 400 260' preserveAspectRatio='xMidYMid slice'><rect width='400' height='260' fill='#2e2e2e'/><g fill='#0d0d0d'><circle cx='200' cy='86' r='30'/><path d='M168 118 h64 v34 c0 9 5 15 5 26 l-7 78 c0 9 -7 14 -15 14 h-13 c-8 0 -13 -5 -13 -14 l-5 -56 h-5 l-5 56 c0 9 -5 14 -13 14 h-13 c-8 0 -15 -5 -15 -14 l-7 -78 c0 -11 5 -17 5 -26 z'/></g></svg>`,
+  },
+];
+---
+<div class="wrap">
+  <div class="banners">
+    {banners.map((b) => (
+      <div class="banner" data-filter={b.filter} role="button" tabindex="0">
+        <div class="banner-bg" set:html={b.bg}></div>
+        <div class="k">{b.k}</div>
+        <h3>{b.title}</h3>
+        <span class="btn-outline">{b.cta}</span>
+      </div>
+    ))}
+  </div>
+</div>
