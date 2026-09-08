@@ -1,0 +1,44 @@
+---
+// Por qué elegirnos: 4 tarjetas de confianza
+const items = [
+  {
+    t: "100% Original",
+    d: "Productos originales verificados. Nunca réplicas ni imitaciones.",
+    ico: '<path d="M12 2 4 5v6c0 5 3.5 9 8 11 4.5-2 8-6 8-11V5l-8-3z"/><path d="m9 12 2 2 4-4"/>',
+  },
+  {
+    t: "Importado de USA",
+    d: "Traído directamente de Estados Unidos, de tiendas y drops oficiales.",
+    ico: '<path d="M2 12h20M12 2c3 3 3 17 0 20M12 2c-3 3-3 17 0 20"/><circle cx="12" cy="12" r="10"/>',
+  },
+  {
+    t: "Envíos a todo México",
+    d: "Llegamos a cualquier ciudad, con seguimiento y empaque protegido.",
+    ico: '<path d="M1 3h15v13H1z"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/>',
+  },
+  {
+    t: "Soporte real",
+    d: "Te acompañamos antes, durante y después de tu compra por WhatsApp.",
+    ico: '<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>',
+  },
+];
+---
+<section class="section section--tight">
+  <div class="wrap">
+    <div class="sec-head sec-head--center reveal">
+      <span class="sec-kicker">Por qué Athletic Vault</span>
+      <h2 class="sec-title">Confianza en cada detalle</h2>
+    </div>
+    <div class="why-grid">
+      {items.map((it, i) => (
+        <div class="why-card reveal" data-delay={i}>
+          <div class="ico">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" set:html={it.ico}></svg>
+          </div>
+          <h4>{it.t}</h4>
+          <p>{it.d}</p>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>

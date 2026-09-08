@@ -1,0 +1,26 @@
+---
+// Página de información reutilizable (hero + contenido)
+const {
+  title,
+  kicker = "Información",
+  sub = "",
+}: {
+  title: string;
+  kicker?: string;
+  sub?: string;
+} = Astro.props;
+---
+<section class="page-hero">
+  <div class="wrap">
+    <div class="kicker">{kicker}</div>
+    <h1>{title}</h1>
+    {sub && <p>{sub}</p>}
+  </div>
+</section>
+<section class="section">
+  <div class="wrap">
+    <div class="info-block">
+      <slot />
+    </div>
+  </div>
+</section>

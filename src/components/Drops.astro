@@ -1,0 +1,41 @@
+---
+// Drops: countdown + formulario de notificación
+import Logo from "./Logo.astro";
+import { CONFIG } from "../data/products.js";
+---
+<section class="section section--dark drops" id="drops">
+  <div class="wrap">
+    <div class="drops-inner">
+      <div class="reveal">
+        <div class="drop-tag"><span class="pulse"></span> Próximo drop</div>
+        <h2 class="drop-title">Black Friday <span class="x">2026</span></h2>
+        <p class="drop-sub">
+          Edición limitada de las piezas más codiciadas. Stock reducido, precios exclusivos.
+          Activa tu alerta y sé el primero en entrar.
+        </p>
+
+        <div class="countdown" id="countdown" data-target={CONFIG.nextDrop}>
+          <div class="cd-unit"><div class="val" data-cd="d">00</div><div class="lbl">Días</div></div>
+          <div class="cd-unit"><div class="val" data-cd="h">00</div><div class="lbl">Horas</div></div>
+          <div class="cd-unit"><div class="val" data-cd="m">00</div><div class="lbl">Min</div></div>
+          <div class="cd-unit"><div class="val" data-cd="s">00</div><div class="lbl">Seg</div></div>
+        </div>
+
+        <form class="drop-form" id="dropForm">
+          <input type="email" required placeholder="Tu correo electrónico" aria-label="Correo electrónico" />
+          <button type="submit" class="btn btn--red">Activar alerta</button>
+        </form>
+      </div>
+
+      <div class="drop-visual reveal" data-delay="1" aria-hidden="true">
+        <div class="ring"></div>
+        <div class="ring"></div>
+        <div class="ring"></div>
+        <div class="center">
+          <div class="mark"><Logo color="#ffffff" height={64} /></div>
+          <span>Limited Drop</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,39 @@
+---
+import Base from "../layouts/Base.astro";
+import TopBar from "../components/TopBar.astro";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import InfoPage from "../components/InfoPage.astro";
+---
+<Base title="Guía de tallas | Athletic Vault" description="Guía de tallas para elegir la talla correcta en leggings, tops, playeras, shorts y más.">
+  <TopBar />
+  <Header />
+  <main>
+    <InfoPage title="Guía de tallas" kicker="Encuentra tu talla" sub="Medidas aproximadas en centímetros. Ante la duda, escríbenos y te ayudamos a elegir.">
+      <h2>Mujer</h2>
+      <ul>
+        <li><strong>XS:</strong> Pecho 80–84 cm · Cintura 62–66 cm · Cadera 88–92 cm</li>
+        <li><strong>S:</strong> Pecho 84–88 cm · Cintura 66–70 cm · Cadera 92–96 cm</li>
+        <li><strong>M:</strong> Pecho 88–94 cm · Cintura 70–76 cm · Cadera 96–102 cm</li>
+        <li><strong>L:</strong> Pecho 94–100 cm · Cintura 76–82 cm · Cadera 102–108 cm</li>
+      </ul>
+
+      <h2>Hombre</h2>
+      <ul>
+        <li><strong>S:</strong> Pecho 90–96 cm · Cintura 76–82 cm</li>
+        <li><strong>M:</strong> Pecho 96–102 cm · Cintura 82–88 cm</li>
+        <li><strong>L:</strong> Pecho 102–110 cm · Cintura 88–96 cm</li>
+        <li><strong>XL:</strong> Pecho 110–118 cm · Cintura 96–104 cm</li>
+        <li><strong>XXL:</strong> Pecho 118–126 cm · Cintura 104–112 cm</li>
+      </ul>
+
+      <h2>Consejos</h2>
+      <ul>
+        <li>Los leggings y bras de compresión se sienten más ajustados; si estás entre dos tallas, elige la mayor para mayor comodidad.</li>
+        <li>Las prendas de punto (hoodies, pants) tienen corte relajado; puedes elegir tu talla habitual.</li>
+        <li>Cada marca tiene su propio ajuste. Revisa la descripción de cada producto.</li>
+      </ul>
+    </InfoPage>
+  </main>
+  <Footer />
+</Base>

@@ -1,0 +1,36 @@
+---
+import Base from "../layouts/Base.astro";
+import TopBar from "../components/TopBar.astro";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import InfoPage from "../components/InfoPage.astro";
+---
+<Base title="Cambios y devoluciones | Athletic Vault" description="Política de cambios y devoluciones de Athletic Vault: tiempos, condiciones y proceso.">
+  <TopBar />
+  <Header />
+  <main>
+    <InfoPage title="Cambios y devoluciones" kicker="Tu tranquilidad" sub="Queremos que compres con confianza. Estas son nuestras condiciones.">
+      <h2>Plazo</h2>
+      <p>Puedes solicitar un cambio o devolución dentro de los <strong>7 días naturales</strong> posteriores a la entrega de tu pedido.</p>
+
+      <h2>Condiciones</h2>
+      <ul>
+        <li>El producto debe estar sin uso y en sus condiciones originales.</li>
+        <li>Debe conservar etiquetas y empaque intactos.</li>
+        <li>Los productos de higiene personal (como botellas) solo son elegibles si presentan defecto de fábrica.</li>
+        <li>El cliente cubre el costo del envío de retorno, salvo defecto de fábrica.</li>
+      </ul>
+
+      <h2>Proceso</h2>
+      <ul>
+        <li>1. Escríbenos por WhatsApp con tu número de pedido y la razón del cambio o devolución.</li>
+        <li>2. Te indicamos la dirección y el método para el retorno.</li>
+        <li>3. Al recibir y verificar el producto, procesamos el cambio o el reembolso.</li>
+      </ul>
+
+      <h2>Reembolsos</h2>
+      <p>Los reembolsos se realizan al mismo método de pago original en un plazo de 5 a 10 días hábiles, según la institución.</p>
+    </InfoPage>
+  </main>
+  <Footer />
+</Base>

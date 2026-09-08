@@ -1,0 +1,52 @@
+---
+// Drawer lateral del carrito
+---
+<div class="drawer-overlay" id="drawerOverlay"></div>
+<aside class="drawer" id="cartDrawer" aria-hidden="true" aria-label="Carrito de compras">
+  <div class="drawer-head">
+    <h3>Tu carrito <span id="cartCountLabel" style="color:var(--muted);font-weight:500;font-size:14px"></span></h3>
+    <button class="search-close" id="drawerClose" aria-label="Cerrar carrito">&times;</button>
+  </div>
+  <!-- Vista de éxito (tras continuar por WhatsApp) -->
+  <div class="drawer-body" id="cartSuccess" style="display:none">
+    <div class="success-box">
+      <div class="success-ico">✓</div>
+      <h3 id="successTitle">¡Solicitud enviada!</h3>
+      <p id="successMsg">Abrimos WhatsApp con tu pedido. Envía el mensaje para confirmar disponibilidad y envío.</p>
+      <button class="btn btn--primary btn--block" id="successClose">Seguir comprando</button>
+    </div>
+  </div>
+
+  <!-- Vista normal del carrito -->
+  <div class="drawer-body" id="cartBody">
+    <div class="drawer-empty" id="cartEmpty">
+      <div class="big">🛍️</div>
+      <h3>Tu carrito está vacío</h3>
+      <p>Explora la colección y agrega tus piezas favoritas.</p>
+    </div>
+  </div>
+
+  <div class="drawer-foot" id="cartFoot" style="display:none">
+    <!-- Modo: comprar / apartar -->
+    <div class="mode-toggle mode-toggle--drawer" id="drawerMode" role="group" aria-label="Modo de compra">
+      <button class="mode-btn active" data-mode="compra">Comprar</button>
+      <button class="mode-btn" data-mode="reserva">Apartar</button>
+    </div>
+
+    <div class="cart-line"><span>Subtotal</span><span id="cartSubtotal">$0 MXN</span></div>
+    <div class="cart-line"><span>Envío</span><span class="free" id="cartShipping">Se calcula al finalizar</span></div>
+    <div class="cart-line total"><span>Total</span><span id="cartTotal">$0 MXN</span></div>
+
+    <!-- Datos del cliente (invitado, sin cuenta) -->
+    <div class="guest-form">
+      <input type="text" id="guestName" placeholder="Tu nombre" aria-label="Tu nombre" autocomplete="name" />
+      <input type="tel" id="guestPhone" placeholder="Tu WhatsApp (con lada)" aria-label="Tu WhatsApp" autocomplete="tel" />
+    </div>
+
+    <button class="btn btn--red btn--block" id="checkoutBtn">
+      <span id="checkoutLabel">Continuar por WhatsApp</span>
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+    </button>
+    <p class="drawer-note" id="drawerNote">Sin cuenta. Te contactamos por WhatsApp para confirmar.</p>
+  </div>
+</aside>

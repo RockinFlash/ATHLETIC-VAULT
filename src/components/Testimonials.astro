@@ -1,0 +1,50 @@
+---
+// Testimonios: 3 tarjetas + nota de que son ilustrativos
+const items = [
+  {
+    q: "Pedí un legging de Gymshark y llegó en 4 días a CDMX. Original, con etiqueta y todo. El empaque se nota premium.",
+    n: "Daniela R.",
+    l: "Ciudad de México",
+    s: 5,
+  },
+  {
+    q: "La atención por WhatsApp fue clave. Me ayudaron con la talla y me confirmaron que era original antes de comprar.",
+    n: "Carlos M.",
+    l: "Guadalajara",
+    s: 5,
+  },
+  {
+    q: "Llevo tres compras y siempre llega bien empacado y a tiempo. El seguimiento en tiempo real da mucha confianza.",
+    n: "Sofía T.",
+    l: "Monterrey",
+    s: 5,
+  },
+];
+const star = '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.9 6.3 6.9.7-5.1 4.6 1.4 6.8L12 17.8 5.9 20.4l1.4-6.8L2.2 9l6.9-.7z"/></svg>';
+---
+<section class="section section--tight">
+  <div class="wrap">
+    <div class="sec-head sec-head--center reveal">
+      <span class="sec-kicker">Lo que dicen</span>
+      <h2 class="sec-title">Clientes que confían</h2>
+    </div>
+    <div class="testi-grid">
+      {items.map((t, i) => (
+        <div class="testi-card reveal" data-delay={i}>
+          <div class="stars" set:html={star.repeat(t.s)}></div>
+          <p class="quote">“{t.q}”</p>
+          <div class="who">
+            <div class="avatar">{t.n.charAt(0)}</div>
+            <div>
+              <strong>{t.n}</strong>
+              <span>{t.l}</span>
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+    <p class="testi-note reveal" data-delay="2">
+      * Testimonios ilustrativos. Las reseñas reales se publican una vez que recibimos retroalimentación verificada de clientes.
+    </p>
+  </div>
+</section>

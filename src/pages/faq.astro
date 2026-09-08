@@ -1,0 +1,31 @@
+---
+import Base from "../layouts/Base.astro";
+import TopBar from "../components/TopBar.astro";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import InfoPage from "../components/InfoPage.astro";
+const faqs = [
+  { q: "¿Los productos son originales?", a: "Sí. Todos nuestros productos son originales, importados de Estados Unidos y verificados antes de enviarse. Nunca vendemos réplicas." },
+  { q: "¿Son distribuidores oficiales de las marcas?", a: "No. Somos una tienda e importador independiente. Comercializamos productos originales de marcas como Gymshark, lululemon, Alo y Vuori, pero no somos la marca ni su distribuidor oficial." },
+  { q: "¿A qué zonas envían?", a: "Enviamos a todo México. El tiempo estimado y el costo se confirman al finalizar tu pedido por WhatsApp." },
+  { q: "¿Cómo hago mi pedido?", a: "Agrega tus productos al carrito y presiona “Finalizar por WhatsApp”. Te atenderemos para confirmar talla, color, envío y pago." },
+  { q: "¿Qué métodos de pago aceptan?", a: "Aceptamos transferencia bancaria y pagos a través de plataformas seguras. Te compartimos las opciones al confirmar tu pedido." },
+  { q: "¿Puedo cambiar o devolver un producto?", a: "Sí, sujeto a nuestra política de cambios y devoluciones. Revisa la página de cambios para conocer los tiempos y condiciones." },
+  { q: "¿Cómo elijo mi talla?", a: "Cada producto muestra sus tallas disponibles. Si tienes dudas, consulta nuestra guía de tallas o escríbenos por WhatsApp." },
+];
+---
+<Base title="Preguntas frecuentes | Athletic Vault" description="Resolvemos tus dudas: autenticidad, envíos, pagos, tallas, cambios y devoluciones en Athletic Vault.">
+  <TopBar />
+  <Header />
+  <main>
+    <InfoPage title="Preguntas frecuentes" kicker="Ayuda" sub="Todo lo que necesitas saber antes de comprar.">
+      {faqs.map((f) => (
+        <div class="faq-item">
+          <h4>{f.q} <span class="plus">+</span></h4>
+          <p>{f.a}</p>
+        </div>
+      ))}
+    </InfoPage>
+  </main>
+  <Footer />
+</Base>

@@ -1,0 +1,31 @@
+---
+import Base from "../layouts/Base.astro";
+import TopBar from "../components/TopBar.astro";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import InfoPage from "../components/InfoPage.astro";
+---
+<Base title="Envíos | Athletic Vault" description="Tiempos, costos y cobertura de envío a todo México en Athletic Vault.">
+  <TopBar />
+  <Header />
+  <main>
+    <InfoPage title="Envíos" kicker="Logística" sub="Llevamos tu pedido a cualquier parte de México, con seguimiento y empaque protegido.">
+      <h2>Cobertura</h2>
+      <p>Enviamos a todo el territorio nacional. Los tiempos y costos dependen de la ciudad de destino y se confirman al finalizar tu pedido por WhatsApp.</p>
+
+      <h2>Tiempos estimados</h2>
+      <ul>
+        <li><strong>Zona centro (CDMX, Estado de México, Puebla, Querétaro):</strong> 2 a 4 días hábiles.</li>
+        <li><strong>Zonas norte y sur:</strong> 3 a 6 días hábiles.</li>
+        <li><strong>Zonas remotas:</strong> 5 a 8 días hábiles.</li>
+      </ul>
+
+      <h2>Seguimiento</h2>
+      <p>Al despachar tu pedido te compartimos el número de guía y el enlace de seguimiento para que rastrees tu paquete en tiempo real.</p>
+
+      <h2>Empaque</h2>
+      <p>Cada producto se empaca de forma individual y protegida para que llegue en perfectas condiciones. Si detectas algún daño al recibirlo, contáctanos de inmediato con fotos.</p>
+    </InfoPage>
+  </main>
+  <Footer />
+</Base>

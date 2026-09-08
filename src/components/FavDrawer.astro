@@ -1,0 +1,20 @@
+---
+// Drawer lateral de favoritos
+const base = Astro.site ? Astro.site.pathname.replace(/\/+$/, "") : "";
+---
+<div class="drawer-overlay" id="favOverlay"></div>
+<aside class="drawer" id="favDrawer" aria-hidden="true" aria-label="Tus favoritos">
+  <div class="drawer-head">
+    <h3>Tus favoritos <span id="favCountLabel" style="color:var(--muted);font-weight:500;font-size:14px"></span></h3>
+    <button class="search-close" id="favClose" aria-label="Cerrar favoritos">&times;</button>
+  </div>
+
+  <div class="drawer-body" id="favBody">
+    <div class="drawer-empty" id="favEmpty">
+      <div class="big">🤍</div>
+      <h3>Aún no tienes favoritos</h3>
+      <p>Toca el corazón en cualquier producto para guardarlo aquí.</p>
+      <a class="btn btn--primary btn--block" href={base + "/"} style="margin-top:18px">Explorar colección</a>
+    </div>
+  </div>
+</aside>

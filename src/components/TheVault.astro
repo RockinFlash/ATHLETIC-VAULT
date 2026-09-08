@@ -1,0 +1,42 @@
+---
+// THE VAULT: tabs funcionales + grid de productos (filtrado sin recarga)
+import ProductCard from "./ProductCard.astro";
+import { PRODUCTS } from "../data/products.js";
+
+const tabs = [
+  { label: "Todos", filter: "all" },
+  { label: "Gymshark", filter: "brand:gymshark" },
+  { label: "lululemon", filter: "brand:lululemon" },
+  { label: "Alo", filter: "brand:alo" },
+  { label: "Vuori", filter: "brand:vuori" },
+  { label: "Mujer", filter: "gender:mujer" },
+  { label: "Hombre", filter: "gender:hombre" },
+  { label: "Accesorios", filter: "accessory:1" },
+];
+---
+<section class="section" id="vault">
+  <div class="wrap">
+    <div class="sec-head sec-head--row reveal">
+      <div>
+        <span class="sec-kicker">The Vault</span>
+        <h2 class="sec-title">Explora la colección</h2>
+      </div>
+      <div class="tabs" id="vaultTabs" role="tablist">
+        {tabs.map((t, i) => (
+          <button class={`tab ${i === 0 ? "active" : ""}`} data-filter={t.filter} role="tab" aria-selected={i === 0 ? "true" : "false"}>
+            {t.label}
+          </button>
+        ))}
+      </div>
+    </div>
+
+    <div class="pgrid" id="vaultGrid">
+      {PRODUCTS.map((p) => <ProductCard product={p} />)}
+    </div>
+    <div class="empty hidden" id="vaultEmpty">
+      <div class="big">🔍</div>
+      <h3>Sin resultados</h3>
+      <p>No hay productos en esta categoría por ahora.</p>
+    </div>
+  </div>
+</section>

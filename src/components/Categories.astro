@@ -1,0 +1,53 @@
+---
+// Categorías: Mujer, Hombre, Accesorios, Ofertas (clickeables)
+const base = Astro.site ? Astro.site.pathname.replace(/\/+$/, "") : "";
+const tiles = [
+  {
+    title: "Mujer",
+    sub: "Leggings, tops, shorts y más",
+    href: base + "/mujer",
+    bg: `<svg viewBox='0 0 300 400' preserveAspectRatio='xMidYMid slice'><rect width='300' height='400' fill='#2b2b2b'/><g fill='#0d0d0d'><circle cx='150' cy='120' r='34'/><path d='M112 156 h76 v40 c0 10 6 18 6 32 l-8 110 c0 10 -8 16 -18 16 h-16 c-10 0 -16 -6 -16 -16 l-6 -80 h-6 l-6 80 c0 10 -6 16 -16 16 h-16 c-10 0 -18 -6 -18 -16 l-8 -110 c0 -14 6 -22 6 -32 z'/></g></svg>`,
+  },
+  {
+    title: "Hombre",
+    sub: "Playeras, shorts, hoodies y más",
+    href: base + "/hombre",
+    bg: `<svg viewBox='0 0 300 400' preserveAspectRatio='xMidYMid slice'><rect width='300' height='400' fill='#333'/><g fill='#0d0d0d'><circle cx='150' cy='112' r='36'/><path d='M104 156 l38 -18 c10 10 36 10 46 0 l38 18 l30 34 l-26 22 l-10 -10 v150 c0 10 -8 18 -18 18 h-74 c-10 0 -18 -8 -18 -18 v-150 l-10 10 l-26 -22 z'/></g></svg>`,
+  },
+  {
+    title: "Accesorios",
+    sub: "Gorras, bolsas, botellas y más",
+    href: base + "/accesorios",
+    bg: `<svg viewBox='0 0 300 400' preserveAspectRatio='xMidYMid slice'><rect width='300' height='400' fill='#3a3a3a'/><g fill='#0d0d0d'><path d='M90 170 h120 l-12 130 c-1 10 -10 18 -20 18 h-56 c-10 0 -19 -8 -20 -18 z'/><path d='M118 170 c0 -26 14 -40 32 -40 s32 14 32 40' fill='none' stroke='#0d0d0d' stroke-width='11'/></g></svg>`,
+  },
+  {
+    title: "Ofertas",
+    sub: "Hasta 50% OFF",
+    href: base + "/ofertas",
+    offer: true,
+    bg: `<svg viewBox='0 0 300 400' preserveAspectRatio='xMidYMid slice'><rect width='300' height='400' fill='#e11d2e'/><g fill='rgba(255,255,255,.14)'><circle cx='230' cy='90' r='70'/><circle cx='60' cy='300' r='55'/></g></svg>`,
+  },
+];
+---
+<section class="section section--tight">
+  <div class="wrap">
+    <div class="sec-head sec-head--row reveal">
+      <div>
+        <span class="sec-kicker">Colecciones</span>
+        <h2 class="sec-title">Compra por categoría</h2>
+      </div>
+    </div>
+    <div class="tiles">
+      {tiles.map((t, i) => (
+        <a class={`tile ${t.offer ? "tile--offer" : ""} reveal`} data-delay={i} href={t.href}>
+          <div class="tile-bg" set:html={t.bg}></div>
+          <span class="tile-arrow">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </span>
+          <h3>{t.title}</h3>
+          <p>{t.sub}</p>
+        </a>
+      ))}
+    </div>
+  </div>
+</section>

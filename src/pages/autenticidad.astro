@@ -1,0 +1,55 @@
+---
+import Base from "../layouts/Base.astro";
+import TopBar from "../components/TopBar.astro";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import InfoPage from "../components/InfoPage.astro";
+const base = Astro.site ? Astro.site.pathname.replace(/\/+$/, "") : "";
+const cards = [
+  { t: "Compra directa en USA", d: "Adquirimos cada pieza en tiendas y drops oficiales de Estados Unidos, nunca en mercados grises.", ico: '<path d="M1 3h15v13H1z"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/>' },
+  { t: "Control de autenticidad", d: "Verificamos etiquetas, costuras, materiales y acabados contra las especificaciones de cada marca.", ico: '<path d="M12 2 4 5v6c0 5 3.5 9 8 11 4.5-2 8-6 8-11V5l-8-3z"/><path d="m9 12 2 2 4-4"/>' },
+  { t: "Documentación", d: "Cada importación cuenta con su documentación legal. Puedes solicitar el comprobante de tu compra.", ico: '<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M9 13h6M9 17h6"/>' },
+];
+---
+<Base title="Autenticidad | Athletic Vault" description="Cómo garantizamos que cada producto de Athletic Vault es 100% original, importado legalmente de Estados Unidos.">
+  <TopBar />
+  <Header />
+  <main>
+    <InfoPage title="Autenticidad garantizada" kicker="Nuestro compromiso" sub="Somos una tienda independiente que importa y comercializa ropa deportiva original. Nunca vendemos réplicas.">
+      <div class="auth-grid">
+        {cards.map((c) => (
+          <div class="auth-card">
+            <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" set:html={c.ico}></svg></div>
+            <h4>{c.t}</h4>
+            <p>{c.d}</p>
+          </div>
+        ))}
+      </div>
+
+      <h2>¿Quiénes somos?</h2>
+      <p>
+        Athletic Vault es una tienda mexicana que importa y comercializa ropa deportiva
+        <strong>original</strong> de marcas premium de Estados Unidos. <strong>No somos</strong> la marca
+        Gymshark, lululemon, Alo, Vuori, Nike, Under Armour ni New Balance, ni sus distribuidores
+        oficiales. Somos un importador independiente que selecciona, verifica y trae estas piezas
+        para nuestros clientes en México.
+      </p>
+
+      <h2>Nuestro proceso</h2>
+      <ul>
+        <li><strong>Curaduría:</strong> elegimos las piezas más buscadas en tiendas y drops oficiales de USA.</li>
+        <li><strong>Verificación:</strong> revisamos etiquetas, materiales, costuras y acabados de cada unidad.</li>
+        <li><strong>Importación legal:</strong> ingresamos el producto con su documentación correspondiente.</li>
+        <li><strong>Entrega:</strong> empacamos con cuidado y enviamos a todo México con seguimiento.</li>
+      </ul>
+
+      <h2>¿Tienes dudas sobre una pieza?</h2>
+      <p>
+        Escríbenos por WhatsApp y con gusto te compartimos fotos del producto, sus etiquetas y su
+        documentación. Tu tranquilidad es parte de la experiencia.
+      </p>
+      <p><a href={base + "/contacto"}>Ir a contacto →</a></p>
+    </InfoPage>
+  </main>
+  <Footer />
+</Base>

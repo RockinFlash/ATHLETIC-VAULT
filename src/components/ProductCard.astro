@@ -1,0 +1,48 @@
+---
+// Tarjeta de producto reutilizable
+import { silhouette, silhouetteAlt, svgURI } from "../data/products.js";
+const { product: p, style = "" }: { product: any; style?: string } = Astro.props;
+const base = Astro.site ? Astro.site.pathname.replace(/\/+$/, "") : "";
+const hex = p.colors[0]?.hex || "#2b2b2b";
+const img = svgURI(silhouette(p.category, hex));
+const imgAlt = svgURI(silhouetteAlt(p.category, hex));
+const sizesLabel = p.sizes.length > 4 ? `${p.sizes.length} tallas` : p.sizes.join(" · ");
+const out = p.stock <= 0;
+const low = !out && p.stock <= 6;
+---
+<article class={`pcard ${out ? "pcard--out" : ""}`} style={style} data-id={p.id} data-brand={p.brandSlug} data-gender={p.gender} data-category={p.category} data-price={p.price} data-offer={p.offer ? "1" : "0"} data-accessory={p.accessory ? "1" : "0"} data-sizes={p.sizes.join(" ")} data-colors={p.colors.map((c) => c.name).join(" ")} data-stock={p.stock}>
+  <div class="pthumb">
+    <img class="pthumb-img" src={img} alt={p.name} loading="lazy" width="600" height="600" />
+    <img class="pthumb-img pthumb-img--alt" src={imgAlt} alt="" aria-hidden="true" loading="lazy" width="600" height="600" />
+    {p.badge && (
+      <span class={`pbadge ${p.offer ? "pbadge--red" : ""}`}>
+        {p.offer && <svg viewBox="0 0 24 24" fill="currentColor"><path d="M13 2 3 14h7l-1 8 10-12h-7l1-8z"/></svg>}
+        {p.badge}
+      </span>
+    )}
+    {out && <span class="pbadge pbadge--out">AGOTADO</span>}
+    {!out && low && <span class="pbadge pbadge--low">Solo quedan {p.stock}</span>}
+    <button class="wish" data-wish={p.id} aria-label="Agregar a favoritos">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+    </button>
+    <div class="pquick">
+      <a class="btn btn--primary" href={base + `/producto/${p.id}`}>{out ? "Ver producto" : "Ver producto"}</a>
+    </div>
+  </div>
+  <div class="pbody">
+    <div class="pbrand">{p.brand}</div>
+    <h3 class="pname">{p.name}</h3>
+    <div class="pprice">
+      <span class="now">${p.price.toLocaleString("es-MX")} MXN</span>
+      {p.oldPrice && <span class="was">${p.oldPrice.toLocaleString("es-MX")}</span>}
+      {p.discount > 0 && <span class="off">-{p.discount}%</span>}
+    </div>
+    <div class="pcolors">
+      {p.colors.slice(0, 4).map((c) => (
+        <span class="cdot" style={`background:${c.hex}`} title={c.name}></span>
+      ))}
+      {p.colors.length > 4 && <span class="more">+{p.colors.length - 4}</span>}
+    </div>
+    <div class="psize">{sizesLabel}</div>
+  </div>
+</article>

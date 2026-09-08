@@ -1,0 +1,17 @@
+---
+import Base from "../layouts/Base.astro";
+import TopBar from "../components/TopBar.astro";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import Catalog from "../components/Catalog.astro";
+import { byAccessory } from "../data/products.js";
+const products = byAccessory();
+---
+<Base title="Accesorios | Athletic Vault" description="Accesorios deportivos originales: gorras, bolsas, botellas y más para completar tu look.">
+  <TopBar />
+  <Header />
+  <main>
+    <Catalog title="Accesorios" kicker="Colección" sub="Gorras, bolsas, botellas y más para completar tu equipo." products={products} showBrandFilter={false} />
+  </main>
+  <Footer />
+</Base>

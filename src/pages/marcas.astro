@@ -1,0 +1,38 @@
+---
+import Base from "../layouts/Base.astro";
+import TopBar from "../components/TopBar.astro";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import { BRANDS, byBrand } from "../data/products.js";
+const base = Astro.site ? Astro.site.pathname.replace(/\/+$/, "") : "";
+---
+<Base title="Marcas | Athletic Vault" description="Conoce las marcas premium de activewear que comercializamos: Gymshark, lululemon, Alo, Vuori, Nike y más.">
+  <TopBar />
+  <Header />
+  <main>
+    <section class="page-hero">
+      <div class="wrap">
+        <div class="kicker">Nuestras marcas</div>
+        <h1>Marcas premium</h1>
+        <p>Comercializamos productos originales de las marcas deportivas más buscadas de Estados Unidos. No somos distribuidores oficiales: somos una tienda independiente que importa y vende activewear original.</p>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="wrap">
+        <div class="brand-grid" style="grid-template-columns:repeat(3,1fr);margin-top:0">
+          {BRANDS.map((b) => {
+            const count = byBrand(b.slug).length;
+            return (
+              <a class="brand-tile" href={base + `/marca/${b.slug}`} style="aspect-ratio:1.8/1" aria-label={`Ver ${b.name}`}>
+                <span class="brand-name">{b.name}</span>
+                <span class="brand-tag">{b.tag} · {count} productos</span>
+              </a>
+            );
+          })}
+        </div>
+      </div>
+    </section>
+  </main>
+  <Footer />
+</Base>

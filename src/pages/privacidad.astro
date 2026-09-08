@@ -1,0 +1,34 @@
+---
+import Base from "../layouts/Base.astro";
+import TopBar from "../components/TopBar.astro";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import InfoPage from "../components/InfoPage.astro";
+---
+<Base title="Política de privacidad | Athletic Vault" description="Política de privacidad de Athletic Vault: cómo tratamos tus datos.">
+  <TopBar />
+  <Header />
+  <main>
+    <InfoPage title="Política de privacidad" kicker="Legal" sub="Tu información es importante. Así la tratamos.">
+      <h2>Datos que recopilamos</h2>
+      <p>Recopilamos únicamente la información necesaria para procesar tu pedido: nombre, dirección de envío, teléfono y, en su caso, correo electrónico.</p>
+
+      <h2>¿Cómo los usamos?</h2>
+      <ul>
+        <li>Procesar y entregar tu pedido.</li>
+        <li>Compartir el seguimiento de tu envío.</li>
+        <li>Atender tus consultas por WhatsApp o correo.</li>
+      </ul>
+
+      <h2>Compartimos tus datos</h2>
+      <p>Solo compartimos la información necesaria con las paqueterías para la entrega de tu pedido. No vendemos ni cedemos tus datos a terceros con fines comerciales.</p>
+
+      <h2>Tus derechos</h2>
+      <p>Puedes solicitar en cualquier momento la consulta, rectificación o eliminación de tus datos escribiéndonos por WhatsApp o correo.</p>
+
+      <h2>Cookies</h2>
+      <p>Usamos almacenamiento local del navegador únicamente para recordar tu carrito y tus favoritos. No usamos cookies de rastreo de terceros.</p>
+    </InfoPage>
+  </main>
+  <Footer />
+</Base>

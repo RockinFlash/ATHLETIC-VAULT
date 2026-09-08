@@ -1,0 +1,22 @@
+---
+// Marcas destacadas: grid de logos clickeables
+import { BRANDS } from "../data/products.js";
+const base = Astro.site ? Astro.site.pathname.replace(/\/+$/, "") : "";
+---
+<section class="brands">
+  <div class="wrap">
+    <div class="sec-head sec-head--center reveal">
+      <span class="sec-kicker">Marcas destacadas</span>
+      <h2 class="sec-title">Las marcas que buscas</h2>
+      <p class="sec-sub">Comercializamos productos originales de las marcas premium más buscadas de Estados Unidos.</p>
+    </div>
+    <div class="brand-grid reveal" data-delay="1">
+      {BRANDS.map((b) => (
+        <a class="brand-tile" href={base + `/marca/${b.slug}`} aria-label={`Ver ${b.name}`}>
+          <span class="brand-name">{b.name}</span>
+          <span class="brand-tag">{b.tag}</span>
+        </a>
+      ))}
+    </div>
+  </div>
+</section>

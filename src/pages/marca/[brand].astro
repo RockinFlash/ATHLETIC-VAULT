@@ -1,0 +1,32 @@
+---
+import Base from "../../layouts/Base.astro";
+import TopBar from "../../components/TopBar.astro";
+import Header from "../../components/Header.astro";
+import Footer from "../../components/Footer.astro";
+import Catalog from "../../components/Catalog.astro";
+import { BRANDS, byBrand } from "../../data/products.js";
+
+export function getStaticPaths() {
+  return BRANDS.map((b) => ({ params: { brand: b.slug }, props: { brand: b } }));
+}
+
+const { brand } = Astro.props;
+const products = byBrand(brand.slug);
+---
+<Base
+  title={`${brand.name} | Athletic Vault`}
+  description={`Ropa deportiva original de ${brand.name} importada de USA. ${products.length} productos disponibles en Athletic Vault.`}
+>
+  <TopBar />
+  <Header />
+  <main>
+    <Catalog
+      title={brand.name}
+      kicker={brand.tag}
+      sub={`Productos originales de ${brand.name}, importados de Estados Unidos.`}
+      products={products}
+      showBrandFilter={false}
+    />
+  </main>
+  <Footer />
+</Base>

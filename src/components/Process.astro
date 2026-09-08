@@ -1,0 +1,34 @@
+---
+// Proceso: FROM USA TO MX (4 pasos)
+const base = Astro.site ? Astro.site.pathname.replace(/\/+$/, "") : "";
+const steps = [
+  { n: "01", t: "Curaduría en USA", d: "Seleccionamos las piezas más buscadas directamente en tiendas y drops oficiales de Estados Unidos." },
+  { n: "02", t: "Verificación", d: "Cada producto pasa por control de autenticidad y calidad antes de salir de nuestro almacén." },
+  { n: "03", t: "Importación", d: "Importamos de forma legal y segura, con el cuidado que merece un producto premium." },
+  { n: "04", t: "Entrega en México", d: "Recíbelo en tu puerta, en cualquier parte de México, con seguimiento en tiempo real." },
+];
+---
+<section class="section section--dark">
+  <div class="wrap">
+    <div class="sec-head sec-head--center reveal">
+      <span class="sec-kicker">From USA to MX</span>
+      <h2 class="sec-title">Cómo llegamos a ti</h2>
+      <p class="sec-sub">Un proceso transparente de punta a punta, para que compres con total confianza.</p>
+    </div>
+    <div class="process-grid reveal" data-delay="1">
+      {steps.map((s) => (
+        <div class="step">
+          <div class="num">{s.n}</div>
+          <h4>{s.t}</h4>
+          <p>{s.d}</p>
+        </div>
+      ))}
+    </div>
+    <div class="process-cta reveal" data-delay="2">
+      <a href={base + "/autenticidad"} class="btn btn--ghost-light">
+        Conoce nuestro proceso de autenticidad
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </a>
+    </div>
+  </div>
+</section>

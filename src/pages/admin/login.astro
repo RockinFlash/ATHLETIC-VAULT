@@ -1,0 +1,63 @@
+---
+// Panel Admin · Login (standalone, tema oscuro)
+import Logo from "../../components/Logo.astro";
+import "../../styles/admin.css";
+const base = Astro.site ? Astro.site.pathname.replace(/\/+$/, "") : "";
+---
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>Acceso · Athletic Vault Admin</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  </head>
+  <body class="admin-body" data-base={base}>
+    <div class="login-wrap">
+      <div class="login-card">
+        <div class="login-logo">
+          <span class="mark"><Logo color="#ffffff" height={30} /></span>
+          <b>Athletic <span>Vault</span></b>
+        </div>
+        <p class="login-sub">Panel de administración</p>
+
+        <h1 id="loginTitle">Iniciar sesión</h1>
+        <p class="hint" id="loginHint">Ingresa tus credenciales para acceder.</p>
+
+        <div class="login-err" id="loginErr"></div>
+
+        <form id="loginForm">
+          <div class="field">
+            <label for="username">Usuario</label>
+            <input type="text" id="username" autocomplete="username" required />
+          </div>
+          <div class="field">
+            <label for="password">Contraseña</label>
+            <div class="pw-wrap">
+              <input type="password" id="password" autocomplete="current-password" required />
+              <button type="button" class="pw-toggle" id="pwToggle" aria-label="Mostrar contraseña">Mostrar</button>
+            </div>
+          </div>
+          <button type="submit" class="btn-a btn-a--block" id="loginSubmit">Entrar</button>
+        </form>
+
+        <div class="login-notice">
+          <strong>Modo local (demo).</strong> Este panel guarda datos en tu navegador.
+          Para producción se requiere un backend con autenticación del servidor
+          (Supabase / Firebase / API). No se guardan contraseñas en el código.
+        </div>
+
+        <div class="login-foot">
+          <a href={base + "/"}>← Volver a la tienda</a>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      import "../../scripts/admin-login.js";
+    </script>
+  </body>
+</html>

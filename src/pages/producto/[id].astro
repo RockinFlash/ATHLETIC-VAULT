@@ -1,0 +1,153 @@
+---
+import Base from "../../layouts/Base.astro";
+import TopBar from "../../components/TopBar.astro";
+import Header from "../../components/Header.astro";
+import Footer from "../../components/Footer.astro";
+import ProductCard from "../../components/ProductCard.astro";
+import { PRODUCTS, getProduct, related, silhouette, silhouetteAlt, svgURI, CONFIG } from "../../data/products.js";
+
+export function getStaticPaths() {
+  return PRODUCTS.map((p) => ({ params: { id: String(p.id) }, props: { product: p } }));
+}
+
+const { product: p } = Astro.props;
+const base = Astro.site ? Astro.site.pathname.replace(/\/+$/, "") : "";
+const rel = related(p, 4);
+const star = '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.9 6.3 6.9.7-5.1 4.6 1.4 6.8L12 17.8 5.9 20.4l1.4-6.8L2.2 9l6.9-.7z"/></svg>';
+const waMsg = encodeURIComponent(
+  `Hola ${CONFIG.storeName} 👋, me interesa el producto:\n\n• ${p.brand} ${p.name}\n• Precio: $${p.price.toLocaleString("es-MX")} MXN\n\n¿Me pueden dar más información?`
+);
+---
+<Base
+  title={`${p.brand} ${p.name} | Athletic Vault`}
+  description={p.desc}
+>
+  <TopBar />
+  <Header />
+  <main>
+    <div class="wrap">
+      <nav class="breadcrumb" aria-label="Ruta de navegación">
+        <a href={base + "/"}>Inicio</a>
+        <span class="sep">/</span>
+        <a href={base + `/${p.gender}`}>{p.gender === "mujer" ? "Mujer" : "Hombre"}</a>
+        <span class="sep">/</span>
+        <a href={base + `/marca/${p.brandSlug}`}>{p.brand}</a>
+        <span class="sep">/</span>
+        <span>{p.name}</span>
+      </nav>
+
+      <div class="product">
+        <!-- Galería -->
+        <div class="product-gallery">
+          <div class="product-main-img">
+            <img id="mainImg" src={svgURI(silhouette(p.category, p.colors[0].hex))} alt={p.name} width="800" height="800" />
+          </div>
+          <div class="product-thumbs" id="thumbs">
+            <button class="active" data-color={p.colors[0].hex} data-view="full" aria-label="Vista completa">
+              <img src={svgURI(silhouette(p.category, p.colors[0].hex))} alt="Vista completa" loading="lazy" />
+            </button>
+            <button data-color={p.colors[0].hex} data-view="alt" aria-label="Vista detalle">
+              <img src={svgURI(silhouetteAlt(p.category, p.colors[0].hex))} alt="Vista detalle" loading="lazy" />
+            </button>
+            {p.colors.slice(1).map((c) => (
+              <button data-color={c.hex} data-view="full" aria-label={`Color ${c.name}`}>
+                <img src={svgURI(silhouette(p.category, c.hex))} alt={c.name} loading="lazy" />
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <!-- Info -->
+        <div class="product-info" data-stock={p.stock}>
+          <div class="pbrand">{p.brand} <span class="sku">· SKU {p.sku}</span></div>
+          <h1>{p.name}</h1>
+
+          <div class="product-rating">
+            <div class="stars" set:html={star.repeat(p.rating)}></div>
+            <span>{p.rating}.0 · Producto original</span>
+          </div>
+
+          <div class="product-price">
+            <span class="now">${p.price.toLocaleString("es-MX")} MXN</span>
+            {p.oldPrice && <span class="was">${p.oldPrice.toLocaleString("es-MX")}</span>}
+            {p.discount > 0 && <span class="off">-{p.discount}%</span>}
+          </div>
+
+          <p class="product-desc">{p.desc}</p>
+
+          <div class="opt-group">
+            <div class="opt-label"><span>Color</span><span id="colorName" style="font-weight:500;color:var(--muted)">{p.colors[0].name}</span></div>
+            <div class="color-opts" id="colorOpts">
+              {p.colors.map((c, i) => (
+                <button class={`color-opt ${i === 0 ? "active" : ""}`} data-color={c.hex} data-name={c.name} style={`background:${c.hex}`} aria-label={c.name}></button>
+              ))}
+            </div>
+          </div>
+
+          <div class="opt-group">
+            <div class="opt-label"><span>Talla</span><a href={base + "/guia-tallas"}>Guía de tallas</a></div>
+            <div class="size-opts" id="sizeOpts">
+              {p.sizes.map((s, i) => (
+                <button class={`size-opt ${i === 0 ? "active" : ""}`} data-size={s}>{s}</button>
+              ))}
+            </div>
+          </div>
+
+          <div class="mode-toggle" id="modeToggle" role="group" aria-label="Modo de compra">
+            <button class="mode-btn active" data-mode="compra">Comprar</button>
+            <button class="mode-btn" data-mode="reserva">Apartar</button>
+          </div>
+
+          <div class="product-actions">
+            <button class="btn btn--red" id="addCart">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+              <span id="addCartLabel">Agregar al carrito</span>
+            </button>
+            <button class="fav-btn" id="favBtn" data-pid={p.id} aria-label="Agregar a favoritos">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+            </button>
+          </div>
+
+          <a class="btn btn--outline btn--block" style="margin-top:12px" href={`https://wa.me/${CONFIG.whatsapp}?text=${waMsg}`} target="_blank" rel="noopener">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.6 15l-1.3 4.7 4.8-1.3A10 10 0 1 0 12 2zm4.5 12.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.2-.4.2-.4.6-1.2.1-.2 0-.3 0-.5l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5c-.2 0-.5.1-.7.3-.9.9-1.1 2.1-.4 3.5a11 11 0 0 0 4.3 4.2c1.6.8 2.6.9 3.5.6.6-.2 1.5-.6 1.7-1.2.2-.6.2-1.1.1-1.2z"/></svg>
+            Comprar por WhatsApp
+          </a>
+
+          <div class="product-badges">
+            <span class="pb"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2 4 5v6c0 5 3.5 9 8 11 4.5-2 8-6 8-11V5l-8-3z"/><path d="m9 12 2 2 4-4"/></svg> 100% original</span>
+            <span class="pb"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 3h15v13H1z"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg> Envío a todo México</span>
+          </div>
+
+          <p class="stock-note" id="stockNote"></p>
+
+          <div class="product-tabs">
+            <div class="ptab">
+              <h4>Descripción</h4>
+              {p.desc}
+            </div>
+            <div class="ptab">
+              <h4>Material</h4>
+              {p.materials}
+            </div>
+            <div class="ptab">
+              <h4>Cuidado</h4>
+              {p.care}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    {rel.length > 0 && (
+      <section class="related">
+        <div class="wrap">
+          <h2>También te puede gustar</h2>
+          <div class="pgrid">
+            {rel.map((r) => <ProductCard product={r} />)}
+          </div>
+        </div>
+      </section>
+    )}
+  </main>
+  <Footer />
+</Base>

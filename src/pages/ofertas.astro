@@ -1,0 +1,17 @@
+---
+import Base from "../layouts/Base.astro";
+import TopBar from "../components/TopBar.astro";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import Catalog from "../components/Catalog.astro";
+import { byOffer } from "../data/products.js";
+const products = byOffer();
+---
+<Base title="Ofertas | Athletic Vault" description="Ofertas en ropa deportiva original: hasta 50% OFF en leggings, hoodies, tops y más.">
+  <TopBar />
+  <Header />
+  <main>
+    <Catalog title="Ofertas" kicker="Hasta 50% OFF" sub="Piezas originales a precio reducido. Stock limitado." products={products} />
+  </main>
+  <Footer />
+</Base>

@@ -1,0 +1,27 @@
+---
+// Overlay de búsqueda a pantalla completa
+const base = Astro.site ? Astro.site.pathname.replace(/\/+$/, "") : "";
+const chips = ["Gymshark", "lululemon", "Alo", "Vuori", "Legging", "Hoodie", "Short", "Ofertas"];
+---
+<div class="search-overlay" id="searchOverlay" aria-hidden="true">
+  <div class="search-panel">
+    <div class="search-top">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+      <input type="search" id="searchInput" placeholder="Buscar productos, marcas…" autocomplete="off" />
+      <button class="search-close" id="searchClose" aria-label="Cerrar búsqueda">&times;</button>
+    </div>
+    <div class="search-body">
+      <div class="search-chips">
+        {chips.map((c) => (
+          <button class="search-chip" data-chip={c}>{c}</button>
+        ))}
+      </div>
+      <div class="search-results" id="searchResults"></div>
+      <div class="search-empty hidden" id="searchEmpty">
+        <div class="big">🔍</div>
+        <h3>Sin resultados</h3>
+        <p>Prueba con otra palabra o marca.</p>
+      </div>
+    </div>
+  </div>
+</div>
