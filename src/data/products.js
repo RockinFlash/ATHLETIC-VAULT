@@ -6,8 +6,8 @@
 
 export const CONFIG = {
   // Número de WhatsApp con código de país, SOLO números (sin +, espacios ni guiones).
-  // México: 521 + número. Cambia por el tuyo.
-  whatsapp: "5215500000000",
+  // México: 521 + número.
+  whatsapp: "5219981836360",
   // Usuario de Instagram SIN el @.
   instagram: "athleticvault.mx",
   // Nombre de la tienda en los mensajes.
