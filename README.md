@@ -39,7 +39,7 @@ escribirte por Instagram**.
 ## 📁 Estructura
 
 ```
-ATHLETICVAULT/
+ATHLETIC-VAULT/
 ├─ astro.config.mjs        # Configuración (site, base para GitHub Pages)
 ├─ package.json
 └─ src/
