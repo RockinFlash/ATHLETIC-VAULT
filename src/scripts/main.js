@@ -142,14 +142,14 @@ if (nav && burger) {
 }
 
 // ------------------------------------------------------------
-// THE VAULT: tabs de filtrado (sin recarga)
+// THE VAULT: tabs de filtrado (sin recarga) + hidratación desde db
 // ------------------------------------------------------------
 const vaultTabs = $("#vaultTabs");
 const vaultGrid = $("#vaultGrid");
-if (vaultTabs && vaultGrid) {
-  const cards = $$(".pcard", vaultGrid);
+function initVault() {
+  if (!vaultTabs || !vaultGrid) return;
   const empty = $("#vaultEmpty");
-  vaultTabs.addEventListener("click", (e) => {
+  vaultTabs.onclick = (e) => {
     const tab = e.target.closest(".tab");
     if (!tab) return;
     $$(".tab", vaultTabs).forEach((t) => {
@@ -159,6 +159,7 @@ if (vaultTabs && vaultGrid) {
     tab.classList.add("active");
     tab.setAttribute("aria-selected", "true");
     const f = tab.dataset.filter;
+    const cards = $$(".pcard", vaultGrid);
     let visible = 0;
     cards.forEach((c) => {
       let show = true;
@@ -175,8 +176,28 @@ if (vaultTabs && vaultGrid) {
       }
     });
     if (empty) empty.classList.toggle("hidden", visible > 0);
-  });
+  };
 }
+function hydrateVault() {
+  if (!vaultGrid) return;
+  const all = getProducts().map(normalizeProduct).filter((p) => p.status !== "inactivo");
+  if (!all.length) return; // sin datos: se mantiene el build-time
+  vaultGrid.innerHTML = all.map((p, i) => cardHTML(p, i)).join("");
+  initVault(); // re-vincula tabs con las nuevas tarjetas
+}
+initVault();
+hydrateVault();
+
+// Navegación: tocar la tarjeta (imagen/cuerpo) abre el producto
+// ------------------------------------------------------------
+document.addEventListener("click", (e) => {
+  const card = e.target.closest(".pcard");
+  if (!card) return;
+  // No interceptar el favorito ni el botón "Ver producto" (ya es un enlace)
+  if (e.target.closest(".wish") || e.target.closest("a")) return;
+  const id = card.dataset.id;
+  if (id != null) window.location.href = BASE + "/producto/" + id;
+});
 
 // ------------------------------------------------------------
 // Catálogo: filtros + orden + contador
