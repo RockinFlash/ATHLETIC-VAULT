@@ -33,7 +33,7 @@
 }
 
 *{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;overflow-x:hidden}
 body{
   font-family:var(--font);
   color:var(--ink);
@@ -681,9 +681,14 @@ h1,h2,h3,h4{font-weight:800;letter-spacing:-.02em;line-height:1.05}
   .nav{
     position:fixed;top:0;right:0;bottom:0;width:min(320px,85vw);background:#fff;z-index:120;
     flex-direction:column;align-items:stretch;gap:0;padding:80px 24px 24px;overflow-y:auto;
-    transform:translateX(100%);transition:transform .4s var(--ease-out);box-shadow:var(--shadow-lg);
+    transform:translateX(100%);visibility:hidden;transition:transform .4s var(--ease-out),visibility 0s linear .4s;box-shadow:var(--shadow-lg);
   }
-  .nav.open{transform:translateX(0)}
+  .nav.open{transform:translateX(0);visibility:visible;transition:transform .4s var(--ease-out)}
+  .header .wrap{gap:12px}
+  .logo{gap:8px}
+  .logo-text{display:none}
+  .icon-btn{width:40px;height:40px}
+  .head-actions{gap:2px}
   .nav > a, .nav > .nav-item > a{padding:16px 0;font-size:16px;border-bottom:1px solid var(--line)}
   .nav > a::after,.nav > .nav-item > a::after{display:none}
   .nav-item .mega{position:static;transform:none;width:100%;box-shadow:none;border:none;padding:0 0 8px;opacity:1;visibility:visible;pointer-events:auto;display:none;grid-template-columns:1fr}
