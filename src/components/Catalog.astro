@@ -9,12 +9,14 @@ const {
   sub = "",
   products,
   showBrandFilter = true,
+  scope = "",
 }: {
   title: string;
   kicker?: string;
   sub?: string;
   products: any[];
   showBrandFilter?: boolean;
+  scope?: string;
 } = Astro.props;
 
 const base = Astro.site ? Astro.site.pathname.replace(/\/+$/, "") : "";
@@ -39,7 +41,7 @@ const fmt = (n) => "$" + n.toLocaleString("es-MX");
   </div>
 </section>
 
-<section class="section section--tight" id="catalog">
+<section class="section section--tight" id="catalog" data-scope={scope} data-show-brand={showBrandFilter ? "1" : "0"}>
   <div class="wrap" style="display:grid;grid-template-columns:260px 1fr;gap:36px;align-items:start">
     <!-- Filtros -->
     <aside class="filters" id="filters" aria-label="Filtros">

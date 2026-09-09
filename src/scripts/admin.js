@@ -17,7 +17,7 @@ const $ = (s, c = document) => c.querySelector(s);
 const $$ = (s, c = document) => [...c.querySelectorAll(s)];
 const money = (n) => "$" + Number(n || 0).toLocaleString("es-MX");
 const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
-const imgFor = (p) => svgURI(silhouette(p.category, p.colors?.[0]?.hex || "#2b2b2b"));
+const imgFor = (p) => p.image || svgURI(silhouette(p.category, p.colors?.[0]?.hex || "#2b2b2b"));
 
 // ---------- Protección de ruta ----------
 if (!isLoggedIn()) {
@@ -188,6 +188,16 @@ function openProductForm(p) {
     <div class="modal-body">
       <form id="prodForm">
         <div class="form-grid">
+          <div class="field full"><label>Imagen del producto (opcional)</label>
+            <div class="img-upload">
+              <div class="img-preview" id="imgPreview">${d.image ? `<img src="${d.image}" alt="preview" />` : '<span class="img-ph">Sin imagen</span>'}</div>
+              <div class="img-ctrl">
+                <input type="file" id="imgFile" accept="image/*" />
+                <div class="hint-sm">JPG, PNG o WebP. Se guarda en el navegador (localStorage).</div>
+                <button type="button" class="btn-a btn-a--ghost btn-a--sm" id="imgRemove" ${d.image ? "" : 'style="display:none"'}>Quitar imagen</button>
+              </div>
+            </div>
+          </div>
           <div class="field"><label>Nombre *</label><input name="name" required value="${esc(d.name)}" /></div>
           <div class="field"><label>Marca *</label><select name="brand">${BRANDS.map((b) => `<option value="${b.name}" ${d.brand === b.name ? "selected" : ""}>${b.name}</option>`).join("")}</select></div>
           <div class="field"><label>Género</label><select name="gender"><option ${d.gender === "Mujer" ? "selected" : ""}>Mujer</option><option ${d.gender === "Hombre" ? "selected" : ""}>Hombre</option></select></div>
@@ -216,12 +226,29 @@ function openProductForm(p) {
       </form>
     </div>
   `);
+  // Imagen: se lee como dataURL (base64) y se guarda en el producto
+  let imgData = d.image || "";
+  const imgFile = $("#imgFile");
+  const imgPreview = $("#imgPreview");
+  if (imgFile) {
+    imgFile.addEventListener("change", () => {
+      const file = imgFile.files[0];
+      if (!file) return;
+      if (file.size > 2 * 1024 * 1024) { toast("Imagen muy grande (máx. 2 MB)", true); imgFile.value = ""; return; }
+      const reader = new FileReader();
+      reader.onload = () => { imgData = reader.result; imgPreview.innerHTML = `<img src="${imgData}" alt="preview" />`; const rm = $("#imgRemove"); if (rm) rm.style.display = ""; };
+      reader.readAsDataURL(file);
+    });
+  }
+  $("#imgRemove")?.addEventListener("click", () => { imgData = ""; imgPreview.innerHTML = '<span class="img-ph">Sin imagen</span>'; if (imgFile) imgFile.value = ""; const rm = $("#imgRemove"); if (rm) rm.style.display = "none"; });
+
   $("#prodForm").addEventListener("submit", (e) => {
     e.preventDefault();
     const f = new FormData(e.target);
     const parseColors = (v) => v.split(",").map((s) => s.trim()).filter(Boolean).map((s) => { const [name, hex] = s.split(":").map((x) => x.trim()); return { name: name || "Color", hex: hex || "#1a1a1a" }; });
     const rec = {
       ...(isEdit ? { id: p.id, sku: p.sku, createdAt: p.createdAt } : {}),
+      image: imgData || undefined,
       name: f.get("name").trim(),
       brand: f.get("brand"),
       gender: f.get("gender"),

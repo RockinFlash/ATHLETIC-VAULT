@@ -6,11 +6,24 @@ import Footer from "../../components/Footer.astro";
 import ProductCard from "../../components/ProductCard.astro";
 import { PRODUCTS, getProduct, related, silhouette, silhouetteAlt, svgURI, CONFIG } from "../../data/products.js";
 
+// Genera páginas para el catálogo base + un rango extra para productos
+// creados en el panel admin (se hidratan en runtime desde la capa de datos).
+// Nota: el valor va inline porque getStaticPaths se ejecuta antes que el
+// cuerpo del módulo (no puede referenciar consts declaradas aquí).
 export function getStaticPaths() {
-  return PRODUCTS.map((p) => ({ params: { id: String(p.id) }, props: { product: p } }));
+  const ids = [];
+  for (let i = 0; i <= 99; i++) ids.push(i);
+  return ids.map((id) => ({ params: { id: String(id) }, props: { product: getProduct(id) || null } }));
 }
 
-const { product: p } = Astro.props;
+const { product } = Astro.props;
+// Respaldo para IDs sin producto en build-time (se rellena en runtime)
+const p = product || {
+  id: 0, brand: "Athletic Vault", brandSlug: "athletic-vault", gender: "mujer",
+  category: "Legging", name: "Producto", price: 0, oldPrice: 0, discount: 0,
+  stock: 0, rating: 0, desc: "", sku: "", badge: "",
+  colors: [{ name: "Negro", hex: "#1a1a1a" }], sizes: ["S"],
+};
 const base = Astro.site ? Astro.site.pathname.replace(/\/+$/, "") : "";
 const rel = related(p, 4);
 const star = '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.9 6.3 6.9.7-5.1 4.6 1.4 6.8L12 17.8 5.9 20.4l1.4-6.8L2.2 9l6.9-.7z"/></svg>';

@@ -1,8 +1,8 @@
 // ============================================================
 // ATHLETIC VAULT · Interactividad (vanilla JS, sin dependencias)
 // ============================================================
-import { PRODUCTS, getProduct, silhouette, silhouetteAlt, svgURI, CONFIG } from "../data/products.js";
-import { getSettings, addReservation, buildWhatsAppMessage } from "../lib/db.js";
+import { PRODUCTS, getProduct, silhouette, silhouetteAlt, svgURI, brandSlug, BRANDS, CONFIG } from "../data/products.js";
+import { getSettings, addReservation, buildWhatsAppMessage, getProducts } from "../lib/db.js";
 
 const $ = (s, c = document) => c.querySelector(s);
 const $$ = (s, c = document) => [...c.querySelectorAll(s)];
@@ -10,6 +10,82 @@ const money = (n) => "$" + Number(n).toLocaleString("es-MX");
 const BASE = document.body?.dataset?.base || "";
 const imgFor = (p, colorHex, view = "full") =>
   svgURI(view === "alt" ? silhouetteAlt(p.category, colorHex || p.colors[0]?.hex || "#2b2b2b") : silhouette(p.category, colorHex || p.colors[0]?.hex || "#2b2b2b"));
+const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+
+// Normaliza un producto de la capa de datos (db.js) añadiendo los campos
+// derivados que products.js asigna en build-time.
+function normalizeProduct(p) {
+  return {
+    ...p,
+    brandSlug: p.brandSlug || brandSlug(p.brand),
+    gender: (p.gender || "").toLowerCase(),
+    accessory: p.accessory ?? ["Bolsa", "Botella", "Gorra"].includes(p.category),
+    offer: p.offer ?? !!p.oldPrice,
+    discount: p.discount ?? (p.oldPrice ? Math.round((1 - p.price / p.oldPrice) * 100) : 0),
+    lowStock: p.lowStock ?? p.stock <= 6,
+  };
+}
+// Lee un producto de la capa de datos (refleja los cambios del admin).
+function dbGetProduct(id) {
+  const p = getProducts().find((x) => x.id === Number(id));
+  return p ? normalizeProduct(p) : null;
+}
+// HTML de una tarjeta de producto (réplica de ProductCard.astro).
+function cardHTML(p, i) {
+  const hex = p.colors[0]?.hex || "#2b2b2b";
+  const img = p.image || svgURI(silhouette(p.category, hex));
+  const imgAlt = p.image || svgURI(silhouetteAlt(p.category, hex));
+  const sizesLabel = p.sizes.length > 4 ? `${p.sizes.length} tallas` : p.sizes.join(" · ");
+  const out = p.stock <= 0;
+  const low = !out && p.stock <= 6;
+  const badge = p.badge
+    ? `<span class="pbadge ${p.offer ? "pbadge--red" : ""}">${p.offer ? '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M13 2 3 14h7l-1 8 10-12h-7l1-8z"/></svg>' : ""}${esc(p.badge)}</span>`
+    : "";
+  const dots = p.colors.slice(0, 4).map((c) => `<span class="cdot" style="background:${c.hex}" title="${esc(c.name)}"></span>`).join("");
+  const more = p.colors.length > 4 ? `<span class="more">+${p.colors.length - 4}</span>` : "";
+  return `<article class="pcard ${out ? "pcard--out" : ""}" style="animation-delay:${Math.min(i * 45, 450)}ms" data-id="${p.id}" data-brand="${esc(p.brandSlug)}" data-gender="${esc(p.gender)}" data-category="${esc(p.category)}" data-price="${p.price}" data-offer="${p.offer ? "1" : "0"}" data-accessory="${p.accessory ? "1" : "0"}" data-sizes="${esc(p.sizes.join(" "))}" data-colors="${esc(p.colors.map((c) => c.name).join(" "))}" data-stock="${p.stock}">
+    <div class="pthumb">
+      <img class="pthumb-img" src="${img}" alt="${esc(p.name)}" loading="lazy" width="600" height="600" />
+      <img class="pthumb-img pthumb-img--alt" src="${imgAlt}" alt="" aria-hidden="true" loading="lazy" width="600" height="600" />
+      ${badge}
+      ${out ? '<span class="pbadge pbadge--out">AGOTADO</span>' : ""}
+      ${!out && low ? `<span class="pbadge pbadge--low">Solo quedan ${p.stock}</span>` : ""}
+      <button class="wish" data-wish="${p.id}" aria-label="Agregar a favoritos"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button>
+      <div class="pquick"><a class="btn btn--primary" href="${BASE}/producto/${p.id}">Ver producto</a></div>
+    </div>
+    <div class="pbody">
+      <div class="pbrand">${esc(p.brand)}</div>
+      <h3 class="pname">${esc(p.name)}</h3>
+      <div class="pprice">
+        <span class="now">$${Number(p.price).toLocaleString("es-MX")} MXN</span>
+        ${p.oldPrice ? `<span class="was">${Number(p.oldPrice).toLocaleString("es-MX")}</span>` : ""}
+        ${p.discount > 0 ? `<span class="off">-${p.discount}%</span>` : ""}
+      </div>
+      <div class="pcolors">${dots}${more}</div>
+      <div class="psize">${esc(sizesLabel)}</div>
+    </div>
+  </article>`;
+}
+// HTML de las facetas de filtro (réplica de Catalog.astro).
+function facetsHTML(products, showBrand) {
+  const cats = [...new Set(products.map((p) => p.category))];
+  const sizes = [...new Set(products.flatMap((p) => p.sizes))].sort();
+  const colors = [...new Set(products.flatMap((p) => p.colors.map((c) => c.name)))];
+  const brands = showBrand ? BRANDS.filter((b) => products.some((p) => p.brandSlug === b.slug)) : [];
+  const prices = products.map((p) => p.price);
+  const minPrice = prices.length ? Math.min(...prices) : 0;
+  const maxPrice = prices.length ? Math.max(...prices) : 0;
+  let html = "";
+  if (showBrand && brands.length) {
+    html += `<div class="fgroup" data-facet="brand"><h4 class="flabel">Marca</h4>${brands.map((b) => `<label class="fopt"><input type="checkbox" value="${esc(b.slug)}" /><span>${esc(b.name)}</span></label>`).join("")}</div>`;
+  }
+  html += `<div class="fgroup" data-facet="category"><h4 class="flabel">Categoría</h4>${cats.map((c) => `<label class="fopt"><input type="checkbox" value="${esc(c)}" /><span>${esc(c)}</span></label>`).join("")}</div>`;
+  html += `<div class="fgroup" data-facet="size"><h4 class="flabel">Talla</h4><div class="fchips">${sizes.map((s) => `<button class="fchip" data-size="${esc(s)}">${esc(s)}</button>`).join("")}</div></div>`;
+  html += `<div class="fgroup" data-facet="color"><h4 class="flabel">Color</h4><div class="fchips">${colors.map((c) => `<button class="fchip" data-color="${esc(c)}">${esc(c)}</button>`).join("")}</div></div>`;
+  html += `<div class="fgroup" data-facet="price"><h4 class="flabel">Precio (MXN)</h4><div style="display:flex;gap:10px;align-items:center"><input type="number" id="priceMin" min="0" max="${maxPrice}" value="${minPrice}" style="width:100%" aria-label="Precio mínimo" /><span style="color:var(--muted)">—</span><input type="number" id="priceMax" min="0" max="${maxPrice}" value="${maxPrice}" style="width:100%" aria-label="Precio máximo" /></div></div>`;
+  html += `<div class="fgroup" data-facet="availability"><h4 class="flabel">Disponibilidad</h4><label class="fopt"><input type="checkbox" value="in" /><span>En existencia</span></label><label class="fopt"><input type="checkbox" value="low" /><span>Pocas unidades</span></label></div>`;
+  return html;
+}
 
 // ------------------------------------------------------------
 // Toast
@@ -105,8 +181,9 @@ if (vaultTabs && vaultGrid) {
 // ------------------------------------------------------------
 // Catálogo: filtros + orden + contador
 // ------------------------------------------------------------
-const catalogGrid = $("#catalogGrid");
-if (catalogGrid) {
+function initCatalog() {
+  const catalogGrid = $("#catalogGrid");
+  if (!catalogGrid) return;
   const cards = $$(".pcard", catalogGrid);
   const empty = $("#catalogEmpty");
   const count = $("#resultCount");
@@ -133,14 +210,14 @@ if (catalogGrid) {
     let visible = 0;
     cards.forEach((c) => {
       const p = Number(c.dataset.price);
-      const sizes = (c.dataset.sizes || "").split(" ");
-      const colors = (c.dataset.colors || "").toLowerCase();
+      const sizeTokens = (c.dataset.sizes || "").toLowerCase().split(/\s+/).filter(Boolean);
+      const colorTokens = (c.dataset.colors || "").toLowerCase();
       const stock = Number(c.dataset.stock);
       let ok = true;
       if (state.brands.size && !state.brands.has(c.dataset.brand)) ok = false;
       if (ok && state.cats.size && !state.cats.has(c.dataset.category)) ok = false;
-      if (ok && state.sizes.size && !state.sizes.has(sizes)) ok = false;
-      if (ok && state.colors.size && ![...state.colors].some((col) => colors.includes(col))) ok = false;
+      if (ok && state.sizes.size && ![...state.sizes].some((s) => sizeTokens.includes(s.toLowerCase()))) ok = false;
+      if (ok && state.colors.size && ![...state.colors].some((col) => colorTokens.includes(col.toLowerCase()))) ok = false;
       if (ok && (p < state.min || p > state.max)) ok = false;
       if (ok && state.inStock && stock <= 0) ok = false;
       if (ok && state.lowStock && stock > 6) ok = false;
@@ -220,6 +297,41 @@ if (catalogGrid) {
   filterToggle?.addEventListener("click", () => filters.classList.toggle("open"));
   apply();
 }
+initCatalog();
+
+// ------------------------------------------------------------
+// Hidratación runtime: relee el catálogo de la capa de datos (db.js)
+// para reflejar los cambios hechos en el panel admin (nuevos productos,
+// ediciones, imágenes, stock). Si no hay datos locales, se mantiene el
+// catálogo renderizado en build-time.
+// ------------------------------------------------------------
+function scopeFilter(scope, p) {
+  if (p.status === "inactivo") return false;
+  if (!scope) return true;
+  if (scope.startsWith("gender:")) return p.gender === scope.split(":")[1];
+  if (scope.startsWith("brand:")) return p.brandSlug === scope.split(":")[1];
+  if (scope === "accessory") return !!p.accessory;
+  if (scope === "new") return p.badge === "NUEVO";
+  if (scope === "offer") return !!p.offer;
+  if (scope === "drop") return p.badge === "NUEVO" || p.lowStock;
+  return true;
+}
+function hydrateCatalog() {
+  const section = $("#catalog");
+  if (!section) return;
+  const scope = section.dataset.scope || "";
+  const showBrand = section.dataset.showBrand === "1";
+  const all = getProducts().map(normalizeProduct).filter((p) => scopeFilter(scope, p));
+  if (!all.length) return; // sin datos: se mantiene el build-time
+  const filters = $("#filters");
+  const grid = $("#catalogGrid");
+  const count = $("#resultCount");
+  if (filters) filters.innerHTML = facetsHTML(all, showBrand);
+  if (grid) grid.innerHTML = all.map((p, i) => cardHTML(p, i)).join("");
+  if (count) count.textContent = `${all.length} producto${all.length === 1 ? "" : "s"}`;
+  initCatalog(); // re-vincula filtros con las nuevas tarjetas
+}
+hydrateCatalog();
 
 // ------------------------------------------------------------
 // Búsqueda (overlay)
@@ -242,6 +354,8 @@ if (searchOverlay && searchInput) {
   };
   $("#searchToggle")?.addEventListener("click", openSearch);
   $("#searchClose")?.addEventListener("click", closeSearch);
+  // Icono de cuenta → panel admin (redirige a login si no hay sesión)
+  $("#accountBtn")?.addEventListener("click", () => { window.location.href = BASE + "/admin"; });
   searchOverlay.addEventListener("click", (e) => { if (e.target === searchOverlay) closeSearch(); });
   document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeSearch(); });
 
@@ -630,13 +744,50 @@ $$(".faq-item h4").forEach((h) =>
 // ------------------------------------------------------------
 // Página de producto: color, talla, galería, carrito, fav
 // ------------------------------------------------------------
-const mainImg = $("#mainImg");
-if (mainImg) {
-  const pid = Number($("#favBtn")?.dataset.pid || 0);
-  const p = getProduct(pid);
-  const stock = Number($(".product-info")?.dataset.stock ?? p.stock);
+function initProductPage() {
+  const mainImg = $("#mainImg");
+  if (!mainImg) return;
+  // El ID se toma de la URL (robusto también para productos creados en el admin)
+  const pid = Number(location.pathname.split("/").filter(Boolean).pop()) || Number($("#favBtn")?.dataset.pid || 0);
+  const p = dbGetProduct(pid) || getProduct(pid);
+  if (!p) {
+    // ID sin producto (ni en catálogo base ni en la capa de datos)
+    const main = document.querySelector("main");
+    if (main) main.innerHTML = `<div class="wrap" style="padding:80px 20px;text-align:center"><div style="font-size:48px">🔍</div><h1 style="margin:16px 0 8px">Producto no disponible</h1><p style="color:var(--muted);margin-bottom:24px">Esta pieza ya no está en el catálogo o el enlace es incorrecto.</p><a class="btn btn--primary" href="${BASE}/">Volver a la tienda</a></div>`;
+    return;
+  }
+  const stock = Number(p.stock);
   const out = stock <= 0;
   let pMode = "compra";
+  // Imagen real subida desde el admin (si existe)
+  if (p.image) mainImg.src = p.image;
+
+  // Hidratar la página de detalle desde la capa de datos (refleja ediciones del admin)
+  const info = $(".product-info");
+  if (info) {
+    info.dataset.stock = p.stock;
+    const brandEl = info.querySelector(".pbrand");
+    if (brandEl) brandEl.innerHTML = `${esc(p.brand)} <span class="sku">· SKU ${esc(p.sku || "")}</span>`;
+    const nameEl = info.querySelector("h1");
+    if (nameEl) nameEl.textContent = p.name;
+    const ratingEl = info.querySelector(".product-rating");
+    if (ratingEl) {
+      const star = '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.9 6.3 6.9.7-5.1 4.6 1.4 6.8L12 17.8 5.9 20.4l1.4-6.8L2.2 9l6.9-.7z"/></svg>';
+      ratingEl.innerHTML = `<div class="stars">${star.repeat(p.rating || 0)}</div><span>${p.rating || 0}.0 · Producto original</span>`;
+    }
+    const priceEl = info.querySelector(".product-price");
+    if (priceEl) priceEl.innerHTML = `<span class="now">$${Number(p.price).toLocaleString("es-MX")} MXN</span>${p.oldPrice ? `<span class="was">${Number(p.oldPrice).toLocaleString("es-MX")}</span>` : ""}${p.discount > 0 ? `<span class="off">-${p.discount}%</span>` : ""}`;
+    const descEl = info.querySelector(".product-desc");
+    if (descEl) descEl.textContent = p.desc || "";
+    const colorOpts = $("#colorOpts");
+    if (colorOpts) colorOpts.innerHTML = p.colors.map((c, i) => `<button class="color-opt ${i === 0 ? "active" : ""}" data-color="${c.hex}" data-name="${esc(c.name)}" style="background:${c.hex}" aria-label="${esc(c.name)}"></button>`).join("");
+    const sizeOpts = $("#sizeOpts");
+    if (sizeOpts) sizeOpts.innerHTML = p.sizes.map((s, i) => `<button class="size-opt ${i === 0 ? "active" : ""}" data-size="${esc(s)}">${esc(s)}</button>`).join("");
+    const thumbs = $("#thumbs");
+    if (thumbs) thumbs.innerHTML = `<button class="active" data-color="${p.colors[0].hex}" data-view="full" aria-label="Vista completa"><img src="${p.image || svgURI(silhouette(p.category, p.colors[0].hex))}" alt="Vista completa" loading="lazy" /></button><button data-color="${p.colors[0].hex}" data-view="alt" aria-label="Vista detalle"><img src="${p.image || svgURI(silhouetteAlt(p.category, p.colors[0].hex))}" alt="Vista detalle" loading="lazy" /></button>${p.colors.slice(1).map((c) => `<button data-color="${c.hex}" data-view="full" aria-label="Color ${esc(c.name)}"><img src="${p.image || svgURI(silhouette(p.category, c.hex))}" alt="${esc(c.name)}" loading="lazy" /></button>`).join("")}`;
+    const colorName = $("#colorName");
+    if (colorName) colorName.textContent = p.colors[0]?.name || "";
+  }
 
   // Nota de stock dinámica
   const stockNote = $("#stockNote");
@@ -681,7 +832,7 @@ if (mainImg) {
       $$("#colorOpts .color-opt").forEach((o) => o.classList.remove("active"));
       opt.classList.add("active");
       const hex = opt.dataset.color;
-      mainImg.src = imgFor(p, hex, "full");
+      mainImg.src = p.image || imgFor(p, hex, "full");
       const cn = $("#colorName");
       if (cn) cn.textContent = opt.dataset.name;
       // sincroniza thumbs (vista completa del color)
@@ -700,7 +851,7 @@ if (mainImg) {
     t.addEventListener("click", () => {
       $$("#thumbs button").forEach((o) => o.classList.remove("active"));
       t.classList.add("active");
-      mainImg.src = imgFor(p, t.dataset.color, t.dataset.view || "full");
+      mainImg.src = p.image || imgFor(p, t.dataset.color, t.dataset.view || "full");
       const hex = t.dataset.color;
       $$("#colorOpts .color-opt").forEach((o) => o.classList.toggle("active", o.dataset.color === hex));
       const cn = $("#colorName");
@@ -724,6 +875,7 @@ if (mainImg) {
     pf.addEventListener("click", () => toggleFav(p.id));
   }
 }
+initProductPage();
 
 // ------------------------------------------------------------
 // Init

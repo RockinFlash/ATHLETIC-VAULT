@@ -26,6 +26,7 @@ const products = byBrand(brand.slug);
       sub={`Productos originales de ${brand.name}, importados de Estados Unidos.`}
       products={products}
       showBrandFilter={false}
+      scope={`brand:${brand.slug}`}
     />
   </main>
   <Footer />
