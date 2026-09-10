@@ -22,7 +22,7 @@ export const CONFIG = {
 // ------------------------------------------------------------
 export const BRANDS = [
   { name: "Gymshark", slug: "gymshark", tag: "Performance" },
-  { name: "lululemon", slug: "lululemon", tag: "Premium", dark: true },
+  { name: "lululemon", slug: "lululemon", tag: "Premium" },
   { name: "Under Armour", slug: "under-armour", tag: "Training" },
   { name: "Alo", slug: "alo", tag: "Lifestyle" },
 ];
