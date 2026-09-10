@@ -22,12 +22,9 @@ export const CONFIG = {
 // ------------------------------------------------------------
 export const BRANDS = [
   { name: "Gymshark", slug: "gymshark", tag: "Performance" },
-  { name: "lululemon", slug: "lululemon", tag: "Premium" },
-  { name: "Alo", slug: "alo", tag: "Lifestyle" },
-  { name: "Vuori", slug: "vuori", tag: "Comfort" },
-  { name: "Nike", slug: "nike", tag: "Iconic" },
+  { name: "lululemon", slug: "lululemon", tag: "Premium", dark: true },
   { name: "Under Armour", slug: "under-armour", tag: "Training" },
-  { name: "New Balance", slug: "new-balance", tag: "Heritage" },
+  { name: "Alo", slug: "alo", tag: "Lifestyle" },
 ];
 
 export const brandSlug = (name) =>
@@ -167,26 +164,9 @@ export const PRODUCTS = [
   { brand:"Alo", gender:"Hombre", category:"Camiseta", name:"Aero Tee", price:1090, sizes:["S","M","L","XL"], colors:[{name:"Negro",hex:"#1a1a1a"},{name:"Blanco",hex:"#f5f5f4"},{name:"Grafito",hex:"#3f3f46"}], stock:14, rating:4, desc:"Playera técnica de secado rápido con corte relajado.", materials:"92% poliéster, 8% elastano", care:"Lavar en frío, secar al aire." },
   { brand:"Alo", gender:"Hombre", category:"Short", name:"Aero Short", price:990, oldPrice:1190, sizes:["S","M","L","XL"], colors:[{name:"Negro",hex:"#1a1a1a"},{name:"Marino",hex:"#1e3a5f"}], stock:16, rating:4, desc:"Short de entrenamiento ligero con bolsillo lateral.", materials:"90% poliéster, 10% elastano", care:"Lavar en frío, secar al aire." },
 
-  // ---------- VUORI · HOMBRE ----------
-  { brand:"Vuori", gender:"Hombre", category:"Pantalón", name:"Pierce Pant", price:2290, sizes:["S","M","L","XL"], colors:[{name:"Negro",hex:"#1a1a1a"},{name:"Caqui",hex:"#a3855c"},{name:"Pizarra",hex:"#334155"}], badge:"MÁS VENDIDO", stock:7, rating:5, desc:"Pantalón de punto suave, del entrenamiento al café.", materials:"70% algodón, 28% poliéster, 2% elastano", care:"Lavar en frío, secar a la sombra." },
-  { brand:"Vuori", gender:"Hombre", category:"Hoodie", name:"Pierce Hoodie", price:2590, oldPrice:2990, sizes:["S","M","L","XL"], colors:[{name:"Negro",hex:"#1a1a1a"},{name:"Hueso",hex:"#e7e5e4"},{name:"Oliva",hex:"#556b2f"}], stock:6, rating:5, desc:"Hoodie de punto premium con corte relajado y bolsillo canguro.", materials:"70% algodón, 30% poliéster", care:"Lavar en frío, secar a la sombra." },
-  { brand:"Vuori", gender:"Hombre", category:"Camiseta", name:"Pierce Tee", price:1190, sizes:["S","M","L","XL"], colors:[{name:"Negro",hex:"#1a1a1a"},{name:"Blanco",hex:"#f5f5f4"},{name:"Salvia",hex:"#8a9a5b"}], stock:18, rating:4, desc:"Playera de algodón orgánico con caída perfecta.", materials:"100% algodón orgánico", care:"Lavar en frío, secar al aire." },
-
-  // ---------- VUORI · MUJER ----------
-  { brand:"Vuori", gender:"Mujer", category:"Legging", name:"Pierce Legging", price:1890, sizes:["XS","S","M","L"], colors:[{name:"Negro",hex:"#1a1a1a"},{name:"Salvia",hex:"#8a9a5b"},{name:"Arena",hex:"#d8c3a5"}], stock:9, rating:5, desc:"Legging de punto suave con cintura alta y tacto premium.", materials:"70% algodón, 28% poliéster, 2% elastano", care:"Lavar en frío, secar a la sombra." },
-  { brand:"Vuori", gender:"Mujer", category:"Hoodie", name:"Pierce Hoodie", price:2490, oldPrice:2890, sizes:["XS","S","M","L"], colors:[{name:"Negro",hex:"#1a1a1a"},{name:"Hueso",hex:"#e7e5e4"},{name:"Rosa palo",hex:"#e7b7c4"}], badge:"NUEVO", stock:5, rating:5, desc:"Hoodie oversize de punto premium, corte relajado.", materials:"70% algodón, 30% poliéster", care:"Lavar en frío, secar a la sombra." },
-
-  // ---------- NIKE · HOMBRE ----------
-  { brand:"Nike", gender:"Hombre", category:"Camiseta", name:"Dri-FIT Legend", price:799, oldPrice:999, sizes:["S","M","L","XL","XXL"], colors:[{name:"Negro",hex:"#1a1a1a"},{name:"Blanco",hex:"#f5f5f4"},{name:"Rojo",hex:"#dc2626"}], badge:"MÁS VENDIDO", stock:30, rating:5, desc:"Playera Dri-FIT de secado rápido para entrenar sin límites.", materials:"100% poliéster Dri-FIT", care:"Lavar en frío, secar al aire." },
-  { brand:"Nike", gender:"Hombre", category:"Short", name:"Pro 7\" Short", price:699, sizes:["S","M","L","XL"], colors:[{name:"Negro",hex:"#1a1a1a"},{name:"Marino",hex:"#1e3a5f"},{name:"Rojo",hex:"#dc2626"}], stock:26, rating:4, desc:"Short de entrenamiento 7\" con malla interior.", materials:"100% poliéster", care:"Lavar en frío, secar al aire." },
-
   // ---------- UNDER ARMOUR · HOMBRE ----------
   { brand:"Under Armour", gender:"Hombre", category:"Camiseta", name:"Tech 2.0 Tee", price:849, oldPrice:1049, sizes:["S","M","L","XL","XXL"], colors:[{name:"Negro",hex:"#1a1a1a"},{name:"Blanco",hex:"#f5f5f4"},{name:"Grafito",hex:"#3f3f46"}], stock:22, rating:4, desc:"Playera técnica de secado rápido con ajuste entallado.", materials:"92% poliéster, 8% elastano", care:"Lavar en frío, secar al aire." },
   { brand:"Under Armour", gender:"Hombre", category:"Short", name:"Rival Fleece Short", price:749, sizes:["S","M","L","XL"], colors:[{name:"Negro",hex:"#1a1a1a"},{name:"Marino",hex:"#1e3a5f"}], stock:20, rating:4, desc:"Short de punto Rival Fleece, cómodo para el día a día.", materials:"88% algodón, 12% poliéster", care:"Lavar en frío, secar a la sombra." },
-
-  // ---------- NEW BALANCE · HOMBRE ----------
-  { brand:"New Balance", gender:"Hombre", category:"Camiseta", name:"Essential Tee", price:699, sizes:["S","M","L","XL"], colors:[{name:"Negro",hex:"#1a1a1a"},{name:"Blanco",hex:"#f5f5f4"},{name:"Gris",hex:"#71717a"}], stock:24, rating:4, desc:"Playera de algodón premium, corte clásico y duradero.", materials:"100% algodón", care:"Lavar en frío, secar al aire." },
-  { brand:"New Balance", gender:"Hombre", category:"Hoodie", name:"Essential Hoodie", price:1590, oldPrice:1890, sizes:["S","M","L","XL"], colors:[{name:"Negro",hex:"#1a1a1a"},{name:"Grafito",hex:"#3f3f46"},{name:"Crema",hex:"#efe9dd"}], stock:11, rating:4, desc:"Hoodie de punto pesado con capucha y bolsillo canguro.", materials:"80% algodón, 20% poliéster", care:"Lavar en frío, secar a la sombra." },
 
   // ---------- ACCESORIOS ----------
   { brand:"lululemon", gender:"Mujer", category:"Bolsa", name:"Everyday Tote", price:1590, sizes:["Única"], colors:[{name:"Negro",hex:"#1a1a1a"},{name:"Arena",hex:"#d8c3a5"}], stock:15, rating:4, desc:"Bolsa de tela resistente para el gym o la ciudad.", materials:"Poliéster reciclado", care:"Lavar a mano, secar al aire." },

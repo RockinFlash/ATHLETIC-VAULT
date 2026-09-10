@@ -1,0 +1,16 @@
+---
+// Logos de marcas: imágenes PNG oficiales (tal cual, sin generar).
+// Las imágenes viven en public/img/brands/{slug}.png.
+// `dark` = la imagen tiene fondo oscuro (lululemon).
+const { slug, height = 34, dark = false } = Astro.props;
+const base = Astro.site ? Astro.site.pathname.replace(/\/+$/, "") : "";
+const src = `${base}/img/brands/${slug}.png`;
+---
+<img
+  class={`brand-logo${dark ? " brand-logo--dark" : ""}`}
+  src={src}
+  alt={slug}
+  loading="lazy"
+  decoding="async"
+  style={`max-height:${height}px;width:auto;height:auto;display:block;object-fit:contain`}
+/>

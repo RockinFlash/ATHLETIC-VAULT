@@ -22,6 +22,8 @@
 //  3. Reemplaza ADMIN_HASH.
 // ============================================================
 
+import { isSupabaseConfigured, adminSignIn, adminSignOut, client } from "./supabase.js";
+
 const SESSION_KEY = "av_admin_session";
 
 // Credencial única de administrador (fija, no registrable)
@@ -39,6 +41,9 @@ async function sha256(text) {
 // Validar credenciales. Devuelve { ok, error? }
 export async function login(username, password) {
   if (!username || !password) return { ok: false, error: "Ingresa usuario y contraseña." };
+  if (isSupabaseConfigured()) {
+    return adminSignIn(username.trim(), password);
+  }
   if (username.trim().toLowerCase() !== ADMIN_USERNAME) {
     return { ok: false, error: "Usuario o contraseña incorrectos." };
   }
@@ -49,6 +54,7 @@ export async function login(username, password) {
 }
 
 export function logout() {
+  if (isSupabaseConfigured()) adminSignOut();
   sessionStorage.removeItem(SESSION_KEY);
 }
 
@@ -58,6 +64,18 @@ export function isLoggedIn() {
   } catch {
     return false;
   }
+}
+
+// Verificación de sesión (async): soporta Supabase Auth y modo local.
+// Úsala en la protección de rutas (admin.js).
+export async function ensureLoggedIn() {
+  if (isSupabaseConfigured()) {
+    const c = client();
+    if (!c) return false;
+    const { data } = await c.auth.getSession();
+    return !!data.session;
+  }
+  return isLoggedIn();
 }
 
 export function currentUser() {

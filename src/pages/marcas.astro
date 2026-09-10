@@ -3,10 +3,11 @@ import Base from "../layouts/Base.astro";
 import TopBar from "../components/TopBar.astro";
 import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
+import BrandLogo from "../components/BrandLogo.astro";
 import { BRANDS, byBrand } from "../data/products.js";
 const base = Astro.site ? Astro.site.pathname.replace(/\/+$/, "") : "";
 ---
-<Base title="Marcas | Athletic Vault" description="Conoce las marcas premium de activewear que comercializamos: Gymshark, lululemon, Alo, Vuori, Nike y más.">
+<Base title="Marcas | Athletic Vault" description="Conoce las marcas premium de activewear que comercializamos: Gymshark, lululemon, Under Armour y Alo.">
   <TopBar />
   <Header />
   <main>
@@ -20,13 +21,18 @@ const base = Astro.site ? Astro.site.pathname.replace(/\/+$/, "") : "";
 
     <section class="section">
       <div class="wrap">
-        <div class="brand-grid" style="grid-template-columns:repeat(3,1fr);margin-top:0">
+        <div class="brand-grid brand-grid--page">
           {BRANDS.map((b) => {
             const count = byBrand(b.slug).length;
             return (
-              <a class="brand-tile" href={base + `/marca/${b.slug}`} style="aspect-ratio:1.8/1" aria-label={`Ver ${b.name}`}>
-                <span class="brand-name">{b.name}</span>
+              <a class={`brand-tile${b.dark ? " brand-tile--dark" : ""}`} href={base + `/marca/${b.slug}`} aria-label={`Ver ${b.name}`}>
+                <span class="brand-logo-wrap">
+                  <BrandLogo slug={b.slug} height={56} dark={b.dark} />
+                </span>
                 <span class="brand-tag">{b.tag} · {count} productos</span>
+                <span class="brand-arrow" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+                </span>
               </a>
             );
           })}

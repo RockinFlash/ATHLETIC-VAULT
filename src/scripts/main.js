@@ -2,7 +2,7 @@
 // ATHLETIC VAULT · Interactividad (vanilla JS, sin dependencias)
 // ============================================================
 import { PRODUCTS, getProduct, silhouette, silhouetteAlt, svgURI, brandSlug, BRANDS, CONFIG } from "../data/products.js";
-import { getSettings, addReservation, buildWhatsAppMessage, getProducts } from "../lib/db.js";
+import { getSettings, addReservation, buildWhatsAppMessage, getProducts, initCloudSync } from "../lib/db.js";
 
 const $ = (s, c = document) => c.querySelector(s);
 const $$ = (s, c = document) => [...c.querySelectorAll(s)];
@@ -185,6 +185,8 @@ function hydrateVault() {
   vaultGrid.innerHTML = all.map((p, i) => cardHTML(p, i)).join("");
   initVault(); // re-vincula tabs con las nuevas tarjetas
 }
+// Sincronizar con la nube (si está configurada) ANTES de hidratar el catálogo
+await initCloudSync();
 initVault();
 hydrateVault();
 

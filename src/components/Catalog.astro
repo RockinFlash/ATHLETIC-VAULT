@@ -10,6 +10,7 @@ const {
   products,
   showBrandFilter = true,
   scope = "",
+  hideHero = false,
 }: {
   title: string;
   kicker?: string;
@@ -17,6 +18,7 @@ const {
   products: any[];
   showBrandFilter?: boolean;
   scope?: string;
+  hideHero?: boolean;
 } = Astro.props;
 
 const base = Astro.site ? Astro.site.pathname.replace(/\/+$/, "") : "";
@@ -33,13 +35,15 @@ const minPrice = Math.min(...prices);
 const maxPrice = Math.max(...prices);
 const fmt = (n) => "$" + n.toLocaleString("es-MX");
 ---
-<section class="page-hero">
-  <div class="wrap">
-    <div class="kicker">{kicker}</div>
-    <h1>{title}</h1>
-    {sub && <p>{sub}</p>}
-  </div>
-</section>
+{!hideHero && (
+  <section class="page-hero">
+    <div class="wrap">
+      <div class="kicker">{kicker}</div>
+      <h1>{title}</h1>
+      {sub && <p>{sub}</p>}
+    </div>
+  </section>
+)}
 
 <section class="section section--tight" id="catalog" data-scope={scope} data-show-brand={showBrandFilter ? "1" : "0"}>
   <div class="wrap" style="display:grid;grid-template-columns:260px 1fr;gap:36px;align-items:start">

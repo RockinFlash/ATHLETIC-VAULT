@@ -16,9 +16,10 @@
 // ============================================================
 
 import { PRODUCTS, CONFIG } from "../data/products.js";
+import { isSupabaseConfigured, saveCollection, fetchCollection } from "./supabase.js";
 
 const NS = "av_"; // namespace de claves
-const SEED_VERSION = 1;
+const SEED_VERSION = 2; // 2 = catálogo reducido a 4 marcas (Gymshark, lululemon, Under Armour, Alo)
 
 const read = (k, d) => {
   try {
@@ -28,7 +29,15 @@ const read = (k, d) => {
     return d;
   }
 };
-const write = (k, v) => localStorage.setItem(NS + k, JSON.stringify(v));
+// Propagar a la nube (fire-and-forget). No hace nada si Supabase no está configurado.
+function sync(k, v) {
+  if (!isSupabaseConfigured()) return;
+  saveCollection(k, v).catch((e) => console.warn("[AV] No se pudo sincronizar con la nube:", e));
+}
+const write = (k, v, opts = {}) => {
+  localStorage.setItem(NS + k, JSON.stringify(v));
+  if (opts.sync !== false) sync(k, v);
+};
 
 // ------------------------------------------------------------
 // Configuración (centralizada, editable desde el panel)
@@ -68,11 +77,29 @@ function seedProducts() {
       isNew: p.isNew ?? p.badge === "NUEVO",
       createdAt: p.createdAt || Date.now() - (PRODUCTS.length - i) * 864e5,
     }));
-    write("products", seeded);
-    write("seedVersion", SEED_VERSION);
+    write("products", seeded, { sync: false });
+    write("seedVersion", SEED_VERSION, { sync: false });
   }
 }
 seedProducts();
+
+// Sincronización inicial con la nube: si hay datos en Supabase, sobrescribe
+// el localStorage local. No hace nada si Supabase no está configurado.
+export async function initCloudSync() {
+  if (!isSupabaseConfigured()) return false;
+  try {
+    const [products, settings] = await Promise.all([
+      fetchCollection("products"),
+      fetchCollection("settings"),
+    ]);
+    if (products) write("products", products, { sync: false });
+    if (settings) write("settings", settings, { sync: false });
+    return true;
+  } catch (e) {
+    console.warn("[AV] No se pudo sincronizar con la nube, usando datos locales:", e);
+    return false;
+  }
+}
 
 export function getProducts() {
   return read("products", []);

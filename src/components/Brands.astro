@@ -1,6 +1,7 @@
 ---
-// Marcas destacadas: grid de logos clickeables
+// Marcas destacadas: grid de logos clickeables (SVG reconocibles)
 import { BRANDS } from "../data/products.js";
+import BrandLogo from "./BrandLogo.astro";
 const base = Astro.site ? Astro.site.pathname.replace(/\/+$/, "") : "";
 ---
 <section class="brands">
@@ -12,9 +13,14 @@ const base = Astro.site ? Astro.site.pathname.replace(/\/+$/, "") : "";
     </div>
     <div class="brand-grid reveal" data-delay="1">
       {BRANDS.map((b) => (
-        <a class="brand-tile" href={base + `/marca/${b.slug}`} aria-label={`Ver ${b.name}`}>
-          <span class="brand-name">{b.name}</span>
+        <a class={`brand-tile${b.dark ? " brand-tile--dark" : ""}`} href={base + `/marca/${b.slug}`} aria-label={`Ver ${b.name}`}>
+          <span class="brand-logo-wrap">
+            <BrandLogo slug={b.slug} height={48} dark={b.dark} />
+          </span>
           <span class="brand-tag">{b.tag}</span>
+          <span class="brand-arrow" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </span>
         </a>
       ))}
     </div>

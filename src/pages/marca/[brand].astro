@@ -4,6 +4,7 @@ import TopBar from "../../components/TopBar.astro";
 import Header from "../../components/Header.astro";
 import Footer from "../../components/Footer.astro";
 import Catalog from "../../components/Catalog.astro";
+import BrandLogo from "../../components/BrandLogo.astro";
 import { BRANDS, byBrand } from "../../data/products.js";
 
 export function getStaticPaths() {
@@ -20,13 +21,24 @@ const products = byBrand(brand.slug);
   <TopBar />
   <Header />
   <main>
+    <section class="brand-hero">
+      <div class="wrap">
+        <div class={`brand-hero-logo${brand.dark ? " brand-hero-logo--dark" : ""}`}>
+          <BrandLogo slug={brand.slug} height={88} dark={brand.dark} />
+        </div>
+        <div class="kicker">{brand.tag}</div>
+        <h1>{brand.name}</h1>
+        <p>Productos originales de {brand.name}, importados de Estados Unidos.</p>
+      </div>
+    </section>
     <Catalog
       title={brand.name}
       kicker={brand.tag}
-      sub={`Productos originales de ${brand.name}, importados de Estados Unidos.`}
+      sub=""
       products={products}
       showBrandFilter={false}
       scope={`brand:${brand.slug}`}
+      hideHero
     />
   </main>
   <Footer />

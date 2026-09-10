@@ -7,9 +7,10 @@ import {
   getProducts, getProduct, upsertProduct, deleteProduct, duplicateProduct,
   getInventory, setStock, stockStatus,
   getReservations, addReservation, updateReservation, deleteReservation, RESERVATION_STATUSES,
-  getSettings, saveSettings, getStats, buildWhatsAppMessage,
+  getSettings, saveSettings, getStats, buildWhatsAppMessage, initCloudSync,
 } from "../lib/db.js";
-import { isLoggedIn, currentUser, logout } from "../lib/auth.js";
+import { ensureLoggedIn, currentUser, logout } from "../lib/auth.js";
+import { isSupabaseConfigured, client } from "../lib/supabase.js";
 import { BRANDS, silhouette, svgURI } from "../data/products.js";
 
 const BASE = document.body?.dataset?.base || "";
@@ -18,11 +19,6 @@ const $$ = (s, c = document) => [...c.querySelectorAll(s)];
 const money = (n) => "$" + Number(n || 0).toLocaleString("es-MX");
 const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 const imgFor = (p) => p.image || svgURI(silhouette(p.category, p.colors?.[0]?.hex || "#2b2b2b"));
-
-// ---------- Protección de ruta ----------
-if (!isLoggedIn()) {
-  window.location.replace(BASE + "/admin/login");
-}
 
 // ---------- Toast ----------
 let toastTimer;
@@ -50,12 +46,6 @@ function closeModal() {
 }
 modalOverlay?.addEventListener("click", (e) => { if (e.target === modalOverlay) closeModal(); });
 $("#modal")?.addEventListener("click", (e) => { if (e.target.closest("[data-close-modal]")) closeModal(); });
-
-// ---------- User ----------
-const user = currentUser() || "Admin";
-$("#userName").textContent = user;
-$("#userAv").textContent = user.charAt(0).toUpperCase();
-$("#logoutBtn").addEventListener("click", () => { logout(); window.location.href = BASE + "/admin/login"; });
 
 // ---------- Helpers de estado ----------
 const statusBadge = (s) => {
@@ -464,4 +454,19 @@ function go(name) {
 $$("#sideNav .side-link").forEach((l) => l.addEventListener("click", () => go(l.dataset.view)));
 document.addEventListener("click", (e) => { const g = e.target.closest("[data-goto]"); if (g) go(g.dataset.goto); });
 
-go("dashboard");
+// ---------- Init: protección de ruta + sync + dashboard ----------
+(async () => {
+  const ok = await ensureLoggedIn();
+  if (!ok) { window.location.replace(BASE + "/admin/login"); return; }
+  let u = currentUser() || "Admin";
+  if (isSupabaseConfigured()) {
+    const c = client();
+    const { data } = await c.auth.getSession();
+    u = data?.session?.user?.email || "Admin";
+  }
+  $("#userName").textContent = u;
+  $("#userAv").textContent = u.charAt(0).toUpperCase();
+  $("#logoutBtn").addEventListener("click", () => { logout(); window.location.href = BASE + "/admin/login"; });
+  if (isSupabaseConfigured()) await initCloudSync();
+  go("dashboard");
+})();
