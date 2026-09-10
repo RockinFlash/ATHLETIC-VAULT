@@ -27,6 +27,13 @@ const favicon = "data:image/svg+xml," + encodeURIComponent(
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script is:inline>
+      // Oculta los grids de productos hasta que el JS los hidrate con datos de la nube.
+      // Evita el "flash" de productos viejos (seed) al cargar la página.
+      // is:inline → corre en el head, ANTES de que se pinte el body.
+      document.documentElement.classList.add('av-loading');
+      setTimeout(function () { document.documentElement.classList.remove('av-loading'); }, 8000);
+    </script>
     <title>{title}</title>
     <meta name="description" content={description} />
     <link rel="icon" type="image/svg+xml" href={favicon} />

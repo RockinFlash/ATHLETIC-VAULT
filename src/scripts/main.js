@@ -12,6 +12,33 @@ const imgFor = (p, colorHex, view = "full") =>
   svgURI(view === "alt" ? silhouetteAlt(p.category, colorHex || p.colors[0]?.hex || "#2b2b2b") : silhouette(p.category, colorHex || p.colors[0]?.hex || "#2b2b2b"));
 const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 
+// ------------------------------------------------------------
+// Skeleton loaders: ocultan el grid (con placeholders) MIENTRAS se
+// sincroniza con la nube, para evitar el "flash" de datos viejos.
+// ------------------------------------------------------------
+const reduceMotion = window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
+const _skelHolders = new Map(); // grid -> holder
+function showSkeleton(grid, count = 8) {
+  if (!grid || reduceMotion) return;
+  const skels = Array.from({ length: count })
+    .map(() => `<div class="skel"><div class="sk-thumb"></div><div class="sk-line"></div><div class="sk-line short"></div></div>`)
+    .join("");
+  const holder = document.createElement("div");
+  holder.className = "pgrid pgrid--skel";
+  holder.style.cssText = "grid-column:1/-1";
+  holder.innerHTML = skels;
+  grid.parentNode.insertBefore(holder, grid);
+  grid.style.opacity = "0";
+  _skelHolders.set(grid, holder);
+}
+function revealGrid(grid) {
+  const holder = _skelHolders.get(grid);
+  if (holder) { holder.remove(); _skelHolders.delete(grid); }
+  if (!grid) return;
+  grid.style.transition = "opacity .4s var(--ease)";
+  grid.style.opacity = "1";
+}
+
 // Normaliza un producto de la capa de datos (db.js) añadiendo los campos
 // derivados que products.js asigna en build-time.
 function normalizeProduct(p) {
@@ -185,6 +212,9 @@ function hydrateVault() {
   vaultGrid.innerHTML = all.map((p, i) => cardHTML(p, i)).join("");
   initVault(); // re-vincula tabs con las nuevas tarjetas
 }
+// Ocultar los grids (skeletons) ANTES de sincronizar, para no mostrar datos viejos.
+showSkeleton($("#catalogGrid"));
+showSkeleton(vaultGrid);
 // Sincronizar con la nube (si está configurada) ANTES de hidratar el catálogo
 await initCloudSync();
 initVault();
@@ -358,6 +388,10 @@ function hydrateCatalog() {
   initCatalog(); // re-vincula filtros con las nuevas tarjetas
 }
 hydrateCatalog();
+// Mostrar los grids ya hidratados con los datos de la nube (evita el flash de datos viejos).
+document.documentElement.classList.remove('av-loading');
+revealGrid($("#catalogGrid"));
+revealGrid(vaultGrid);
 
 // ------------------------------------------------------------
 // Búsqueda (overlay)
@@ -721,30 +755,6 @@ $("#dropForm")?.addEventListener("submit", (e) => {
     toast("¡Alerta activada! Te avisaremos 🚀");
   }
 });
-
-// ------------------------------------------------------------
-// Skeleton loaders: muestra placeholders breves al cargar un grid
-// ------------------------------------------------------------
-const reduceMotion = window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
-function skeletonize(grid, count = 8, ms = 420) {
-  if (!grid || reduceMotion) return;
-  const skels = Array.from({ length: count })
-    .map(() => `<div class="skel"><div class="sk-thumb"></div><div class="sk-line"></div><div class="sk-line short"></div></div>`)
-    .join("");
-  const holder = document.createElement("div");
-  holder.className = "pgrid pgrid--skel";
-  holder.style.cssText = "grid-column:1/-1";
-  holder.innerHTML = skels;
-  grid.parentNode.insertBefore(holder, grid);
-  grid.style.opacity = "0";
-  setTimeout(() => {
-    holder.remove();
-    grid.style.transition = "opacity .4s var(--ease)";
-    grid.style.opacity = "1";
-  }, ms);
-}
-skeletonize($("#catalogGrid"));
-skeletonize($("#vaultGrid"));
 
 // ------------------------------------------------------------
 // Reveal on scroll
