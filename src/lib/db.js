@@ -43,7 +43,7 @@ const DEFAULT_SETTINGS = {
   shippingCost: 150,
   freeShippingFrom: 2000,
   waMessage:
-    "Hola {store} 👋, quiero realizar una solicitud de {tipo}.\n\nCliente: {cliente}\nWhatsApp: {whatsapp}\n\nProductos:\n{items}\n\nSubtotal: {subtotal} MXN\n\nQuedo pendiente para continuar con la compra.",
+    "Hola {store} 👋, quiero realizar una solicitud de {tipo}.\n\nCliente: {cliente}\n\nProductos:\n{items}\n\nSubtotal: {subtotal} MXN\n\nQuedo pendiente para continuar con la compra.",
 };
 
 export function getSettings() {

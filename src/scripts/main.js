@@ -188,10 +188,13 @@ function hydrateVault() {
 initVault();
 hydrateVault();
 
-// Navegación: tocar la tarjeta (imagen/cuerpo) abre el producto
+// Navegación: SOLO al tocar la IMAGEN del producto se abre la ficha.
+// El cuerpo blanco (nombre/precio/tallas) NO navega.
 // ------------------------------------------------------------
 document.addEventListener("click", (e) => {
-  const card = e.target.closest(".pcard");
+  const thumb = e.target.closest(".pthumb");
+  if (!thumb) return;
+  const card = thumb.closest(".pcard");
   if (!card) return;
   // No interceptar el favorito ni el botón "Ver producto" (ya es un enlace)
   if (e.target.closest(".wish") || e.target.closest("a")) return;

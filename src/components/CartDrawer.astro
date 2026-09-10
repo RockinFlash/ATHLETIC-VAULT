@@ -27,12 +27,6 @@
   </div>
 
   <div class="drawer-foot" id="cartFoot" style="display:none">
-    <!-- Modo: comprar / apartar -->
-    <div class="mode-toggle mode-toggle--drawer" id="drawerMode" role="group" aria-label="Modo de compra">
-      <button class="mode-btn active" data-mode="compra">Comprar</button>
-      <button class="mode-btn" data-mode="reserva">Apartar</button>
-    </div>
-
     <div class="cart-line"><span>Subtotal</span><span id="cartSubtotal">$0 MXN</span></div>
     <div class="cart-line"><span>Envío</span><span class="free" id="cartShipping">Se calcula al finalizar</span></div>
     <div class="cart-line total"><span>Total</span><span id="cartTotal">$0 MXN</span></div>
@@ -40,7 +34,6 @@
     <!-- Datos del cliente (invitado, sin cuenta) -->
     <div class="guest-form">
       <input type="text" id="guestName" placeholder="Tu nombre" aria-label="Tu nombre" autocomplete="name" />
-      <input type="tel" id="guestPhone" placeholder="Tu WhatsApp (con lada)" aria-label="Tu WhatsApp" autocomplete="tel" />
     </div>
 
     <button class="btn btn--red btn--block" id="checkoutBtn">
