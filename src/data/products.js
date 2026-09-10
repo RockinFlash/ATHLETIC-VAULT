@@ -9,7 +9,7 @@ export const CONFIG = {
   // México: 521 + número.
   whatsapp: "5219981836360",
   // Usuario de Instagram SIN el @.
-  instagram: "athleticvault.mx",
+  instagram: "athletic_vault",
   // Nombre de la tienda en los mensajes.
   storeName: "Athletic Vault",
   // Fecha objetivo del próximo drop (para el contador regresivo).
