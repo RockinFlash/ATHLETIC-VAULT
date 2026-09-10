@@ -1,11 +1,16 @@
 ---
-// Isotipo AV de Athletic Vault (monograma A + V)
-// color: relleno del monograma
+// Isotipo AV de Athletic Vault (monograma A + V) — imagen PNG oficial.
+// color: "negro" (fondo claro) o "blanco" (fondo oscuro, se invierte).
+// height: alto en px.
 const { color = "#0a0a0a", height = 30 }: { color?: string; height?: number } = Astro.props;
+const base = Astro.site ? Astro.site.pathname.replace(/\/+$/, "") : "";
+const light = color === "#ffffff" || color === "white" || color === "#fff";
 ---
-<span class="mark" aria-hidden="true">
-  <svg viewBox="0 0 146 100" fill={color} style={`height:${height}px;width:auto`} role="img" aria-label="Athletic Vault">
-    <path fill-rule="evenodd" d="M55 10 L92 90 H74 L66 70 H44 L36 90 H18 Z M55 30 L64 58 H46 Z" />
-    <path d="M78 10 H96 L112 60 L128 10 H146 L118 90 H106 Z" />
-  </svg>
+<span class={`mark${light ? " mark--light" : ""}`} aria-hidden="true">
+  <img
+    src={`${base}/img/logo.png`}
+    alt="Athletic Vault"
+    style={`height:${height}px;width:auto;display:block`}
+    loading="eager"
+  />
 </span>

@@ -115,7 +115,8 @@ h1,h2,h3,h4{font-weight:800;letter-spacing:-.02em;line-height:1.05}
 .header .wrap{display:flex;align-items:center;gap:28px;height:var(--header-h)}
 .logo{display:flex;align-items:center;gap:11px;white-space:nowrap}
 .logo .mark{height:30px;display:flex;align-items:center;flex-shrink:0}
-.logo .mark svg{height:100%;width:auto}
+.logo .mark img{height:100%;width:auto}
+.mark--light img{filter:invert(1)}
 .logo-text{font-family:"Montserrat",sans-serif;font-weight:900;font-size:17px;letter-spacing:.02em;text-transform:uppercase;line-height:1}
 
 .nav{display:flex;align-items:center;gap:4px;margin-left:8px}
@@ -450,7 +451,7 @@ h1,h2,h3,h4{font-weight:800;letter-spacing:-.02em;line-height:1.05}
 @keyframes spin{to{transform:rotate(360deg)}}
 .drop-visual .center{position:relative;z-index:2;text-align:center}
 .drop-visual .center .mark{height:64px;display:flex;justify-content:center;margin-bottom:16px}
-.drop-visual .center .mark svg{height:100%;width:auto}
+.drop-visual .center .mark img{height:100%;width:auto}
 .drop-visual .center span{font-size:11px;letter-spacing:.3em;text-transform:uppercase;color:#a3a3a3}
 
 /* ============================================================
