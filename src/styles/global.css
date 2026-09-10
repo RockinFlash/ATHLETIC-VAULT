@@ -322,7 +322,6 @@ h1,h2,h3,h4{font-weight:800;letter-spacing:-.02em;line-height:1.05}
 .pcard:hover .pthumb-img{transform:scale(1.06)}
 .pcard:hover .pthumb-img--alt{opacity:1}
 .pcard--out .pthumb-img{filter:grayscale(.5) opacity(.7)}
-.pcard--out .pquick{display:none}
 .pbadge{
   position:absolute;top:12px;left:12px;z-index:3;display:inline-flex;align-items:center;gap:5px;
   background:var(--black);color:#fff;font-size:10px;font-weight:700;letter-spacing:.08em;
@@ -343,12 +342,6 @@ h1,h2,h3,h4{font-weight:800;letter-spacing:-.02em;line-height:1.05}
 .wish svg{width:19px;height:19px;transition:transform .3s var(--ease)}
 .wish.active svg{animation:heartPop .4s var(--ease-out)}
 @keyframes heartPop{0%{transform:scale(1)}45%{transform:scale(1.35)}100%{transform:scale(1)}}
-.pquick{
-  position:absolute;left:12px;right:12px;bottom:12px;z-index:3;
-  transform:translateY(140%);transition:transform .4s var(--ease);
-}
-.pcard:hover .pquick{transform:translateY(0)}
-.pquick .btn{width:100%;padding:13px;font-size:12px}
 .pbody{padding:16px 16px 18px}
 /* Filtros del catálogo (globales: aplican tanto en build-time como en la hidratación runtime) */
 .filters{background:#fff;border:1px solid var(--line);border-radius:var(--radius-lg);padding:22px;position:sticky;top:calc(var(--header-h) + 20px)}
@@ -763,8 +756,6 @@ h1,h2,h3,h4{font-weight:800;letter-spacing:-.02em;line-height:1.05}
   .pgrid{grid-template-columns:repeat(2,1fr);gap:12px}
   .pbody{padding:12px}
   .pname{font-size:14px}
-  .pquick{transform:translateY(0);position:static;margin-top:12px}
-  .pquick .btn{padding:11px;font-size:11px}
   .product{grid-template-columns:1fr;gap:28px}
   .product-gallery{position:static}
   .product-actions{flex-direction:column}

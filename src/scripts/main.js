@@ -78,7 +78,6 @@ function cardHTML(p, i) {
       ${out ? '<span class="pbadge pbadge--out">AGOTADO</span>' : ""}
       ${!out && low ? `<span class="pbadge pbadge--low">Solo quedan ${p.stock}</span>` : ""}
       <button class="wish" data-wish="${p.id}" aria-label="Agregar a favoritos"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button>
-      <div class="pquick"><a class="btn btn--primary" href="${BASE}/producto/${p.id}">Ver producto</a></div>
     </div>
     <div class="pbody">
       <div class="pbrand">${esc(p.brand)}</div>
@@ -228,7 +227,7 @@ document.addEventListener("click", (e) => {
   if (!thumb) return;
   const card = thumb.closest(".pcard");
   if (!card) return;
-  // No interceptar el favorito ni el botón "Ver producto" (ya es un enlace)
+  // No interceptar el favorito (ni cualquier enlace dentro de la imagen)
   if (e.target.closest(".wish") || e.target.closest("a")) return;
   const id = card.dataset.id;
   if (id != null) window.location.href = BASE + "/producto/" + id;

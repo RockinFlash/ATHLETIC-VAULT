@@ -2,7 +2,6 @@
 // Tarjeta de producto reutilizable
 import { silhouette, silhouetteAlt, svgURI } from "../data/products.js";
 const { product: p, style = "" }: { product: any; style?: string } = Astro.props;
-const base = Astro.site ? Astro.site.pathname.replace(/\/+$/, "") : "";
 const hex = p.colors[0]?.hex || "#2b2b2b";
 const img = p.image || svgURI(silhouette(p.category, hex));
 const imgAlt = p.image || svgURI(silhouetteAlt(p.category, hex));
@@ -25,9 +24,6 @@ const low = !out && p.stock <= 6;
     <button class="wish" data-wish={p.id} aria-label="Agregar a favoritos">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
     </button>
-    <div class="pquick">
-      <a class="btn btn--primary" href={base + `/producto/${p.id}`}>{out ? "Ver producto" : "Ver producto"}</a>
-    </div>
   </div>
   <div class="pbody">
     <div class="pbrand">{p.brand}</div>
