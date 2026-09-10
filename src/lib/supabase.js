@@ -22,8 +22,8 @@
 import { createClient } from "@supabase/supabase-js";
 
 // ⚙️ PEGA AQUÍ tus credenciales de Supabase
-const SUPABASE_URL = ""; //      ej: "https://abcdefgh.supabase.co"
-const SUPABASE_ANON_KEY = ""; // la key "anon public" (NUNCA la "service_role")
+const SUPABASE_URL = "https://ptsuqgtmaaxoffdizhqr.supabase.co"; //      ej: "https://abcdefgh.supabase.co"
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InB0c3VxZ3RtYWF4b2ZmZGl6aHFyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODkwNjcyNDQsImV4cCI6MjEwNDY0MzI0NH0.UWMneDtooXmsFNQbaofOqfM_QNQBT2klCqjzNWyhcJo"; // la key "anon public" (NUNCA la "service_role")
 
 export function isSupabaseConfigured() {
   return !!SUPABASE_URL && !!SUPABASE_ANON_KEY && SUPABASE_URL.startsWith("http");
