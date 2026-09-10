@@ -797,6 +797,23 @@ function initProductPage() {
   // Imagen real subida desde el admin (si existe)
   if (p.image) mainImg.src = p.image;
 
+  // Breadcrumb (refleja el producto real, no el seed de build-time)
+  const bc = $(".breadcrumb");
+  if (bc) {
+    const links = bc.querySelectorAll("a");
+    if (links[1]) {
+      const g = (p.gender || "").toLowerCase();
+      links[1].href = `${BASE}/${g}`;
+      links[1].textContent = g === "hombre" ? "Hombre" : "Mujer";
+    }
+    if (links[2]) {
+      links[2].href = `${BASE}/marca/${p.brandSlug || brandSlug(p.brand)}`;
+      links[2].textContent = p.brand;
+    }
+    const last = bc.querySelector("span:not(.sep)");
+    if (last) last.textContent = p.name;
+  }
+
   // Hidratar la página de detalle desde la capa de datos (refleja ediciones del admin)
   const info = $(".product-info");
   if (info) {
